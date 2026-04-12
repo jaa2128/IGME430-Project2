@@ -58,9 +58,21 @@ const DomoForm = (props) => {
 };
 
 const DomoList = (props) => {
-    // only worry about props as Collection List and partly
-    // App handles reloading server info to update this List
-    const domos = props.domos || [];
+    
+    const [domos, setDomos] = useState([]);
+
+     useEffect(() => {
+        // grab domos from the collection we are viewing
+        const loadDomosFromCollection = async () => {
+            const response = await fetch(`/getCollection?id=${props.collectionID}`);
+            const data = await response.json();
+            setDomos(data.collection.domos || []);
+        };
+
+        if(props.collectionID){
+            loadDomosFromCollection();
+        }
+    }, [props.reloadDomos, props.collectionID]);
 
     if(domos.length === 0){
         return (
@@ -72,7 +84,7 @@ const DomoList = (props) => {
 
     const domoNodes = domos.map(domo => {
         return (
-            <div key={domo.id} className='domo'>
+            <div key={domo._id} className='domo'>
                 <img src="/assets/img/domoface.jpeg" alt="domo face" className="domoFace" />
                 <h3 className="domoName">Name: {domo.name}</h3>
                 <h3 className="domoAge">Age: {domo.age}</h3>
@@ -179,23 +191,13 @@ const App = () => {
                         {/* give user ability to add domos */}
                         <div id="makeDomo">
                             <DomoForm collectionID = {selectedCollection._id}
-                            triggerReload={async () => {
-                                // Fetch for this collection for re-render of Domo List
-                                const response = await fetch(`/getCollection?id=${selectedCollection._id}`);
-                                const data = await response.json();
-
-                                // Update selectedCollection with new reference
-                                setSelectedCollection({...data.collection});
-
-                                // reload collections to reflect changes
-                                setReloadCollections(!reloadCollections);
-                            }}
+                            triggerReload={async () => setReloadCollections(!reloadCollections)}
                             />
                         </div>
 
                         {/* Show Domos */}
                         <div className="domos">
-                            <DomoList domos={selectedCollection.domos}/>
+                            <DomoList reloadDomos={reloadCollections} collectionID={selectedCollection._id}/>
                         </div>
                         
                     </div>
