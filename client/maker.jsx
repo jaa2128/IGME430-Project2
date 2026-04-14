@@ -7,10 +7,12 @@ const {createRoot} = require('react-dom/client');
 // pass in deckID to know which deck to add a Token to it
 const handleToken = (e, onTokenAdded, deckID) => {
     e.preventDefault();
+    helper.hideError();
 
     const name = e.target.querySelector('#tokenName').value;
 
     if(!name){
+        helper.handleError('All fields are required');
         return false;
     }
 
@@ -21,10 +23,12 @@ const handleToken = (e, onTokenAdded, deckID) => {
 // function to handle post request to create a Token Deck
 const handleDeck = (e, onDeckAdded) => {
     e.preventDefault();
+    helper.hideError();
 
     const name = e.target.querySelector('#deckName').value;
 
     if(!name){
+        helper.handleError('Collection name required');
         return false;
     }
 
