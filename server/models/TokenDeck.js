@@ -3,7 +3,7 @@ const _ = require('underscore');
 
 const setName = (name) => _.escape(name).trim();
 
-// Schema to describe a Domo Collection
+// Schema to describe a Token Deck
 const TokenDeckSchema = new mongoose.Schema({
     name:{
         type: String,

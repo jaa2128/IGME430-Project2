@@ -3,209 +3,199 @@ const React = require('react');
 const {useState, useEffect} = React;
 const {createRoot} = require('react-dom/client');
 
-// Function to handle post requests to create a new Domo
-// pass in collectionID to know which collection to add a Domo to
-const handleDomo = (e, onDomoAdded, collectionID) => {
+// Function to handle post requests to create a new Token
+// pass in deckID to know which deck to add a Token to it
+const handleToken = (e, onTokenAdded, deckID) => {
     e.preventDefault();
-    helper.hideError();
 
-    const name = e.target.querySelector('#domoName').value;
-    const age = e.target.querySelector('#domoAge').value;
-    const level = e.target.querySelector('#domoLevel').value;
+    const name = e.target.querySelector('#tokenName').value;
 
-    if(!name || !age || !level){
-        helper.handleError('All fields are required');
+    if(!name){
         return false;
     }
 
-    helper.sendPost(e.target.action, {name, age, level, collectionID}, onDomoAdded);
+    helper.sendPost(e.target.action, {name, deckID}, onTokenAdded);
     return false;
 }
 
-// function to handle post request to create a Collection
-const handleCollection = (e, onCollectionAdded) => {
+// function to handle post request to create a Token Deck
+const handleDeck = (e, onDeckAdded) => {
     e.preventDefault();
-    helper.hideError();
 
-    const name = e.target.querySelector('#collName').value;
+    const name = e.target.querySelector('#deckName').value;
 
     if(!name){
-        helper.handleError('Collection name required');
         return false;
     }
 
-    helper.sendPost(e.target.action, {name}, onCollectionAdded);
+    helper.sendPost(e.target.action, {name}, onDeckAdded);
 }
 
-const DomoForm = (props) => {
+const TokenForm = (props) => {
     return(
-        <form id='domoForm'
-            onSubmit={(e) => handleDomo(e, props.triggerReload, props.collectionID)}
-            name='domoForm'
+        <form id='tokenForm'
+            onSubmit={(e) => handleToken(e, props.triggerReload, props.deckID)}
+            name='tokenForm'
             action='/maker'
             method='POST'
-            className='domoForm'
+            className='tokenForm'
         >
             <label htmlFor='name'>Name: </label>
-            <input id="domoName" type="text" name='name' placeholder='Domo Name'/>
-            <label htmlFor='age'>Age: </label>
-            <input id='domoAge' type='number' min='0' name='age'/>
-            <label htmlFor='level'>Level: </label>
-            <input id='domoLevel' type='number' min='1' name='level'/>
-            <input className='makeDomoSubmit' type='submit' value="Make Domo"/>
+            <input id="tokenName" type="text" name='name' placeholder='Token Name'/>
+            <input className='makeToken' type='submit' value="Make Token"/>
         </form>
     );
 };
 
-const DomoList = (props) => {
+const TokenList = (props) => {
     
-    const [domos, setDomos] = useState([]);
+    const [tokens, setTokens] = useState([]);
 
      useEffect(() => {
-        // grab domos from the collection we are viewing
-        const loadDomosFromCollection = async () => {
-            const response = await fetch(`/getCollection?id=${props.collectionID}`);
+        // grab tokens from the deck we are viewing
+        const loadTokensFromDeck = async () => {
+            const response = await fetch(`/getDeck?id=${props.deckID}`);
             const data = await response.json();
-            setDomos(data.collection.domos || []);
+            setTokens(data.deck.tokens || []);
         };
 
-        if(props.collectionID){
-            loadDomosFromCollection();
+        if(props.deckID){
+            loadTokensFromDeck();
         }
-    }, [props.reloadDomos, props.collectionID]);
+    }, [props.reloadTokens, props.deckID]);
 
-    if(domos.length === 0){
+    if(tokens.length === 0){
         return (
-            <div className='domoList'>
-                <h3 className="emptyDomo">No Domos Yet!</h3>
+            <div className='deckList'>
+                <h3 className="emptyToken">No Tokens Yet!</h3>
             </div>
         );
     }
 
-    const domoNodes = domos.map(domo => {
+    const tokenNodes = tokens.map(token => {
         return (
-            <div key={domo._id} className='domo'>
+            <div key={token._id} className='token'>
+                {/* TODO: replace image tag with something other than Domo */}
                 <img src="/assets/img/domoface.jpeg" alt="domo face" className="domoFace" />
-                <h3 className="domoName">Name: {domo.name}</h3>
-                <h3 className="domoAge">Age: {domo.age}</h3>
-                <h3 className="domoLevel">Level : {domo.level}</h3>
+                <h3 className="tokenName">Name: {token.name}</h3>
             </div>
         )
     });
 
     return (
-        <div className="domoList">
-            {domoNodes}
+        <div className="tokenList">
+            {tokenNodes}
         </div>
     )
 }
 
-const CollectionForm = (props) => {
+const DeckForm = (props) => {
     return (
-        <form onSubmit={(e) => handleCollection(e, props.triggerReload)}
-        name='collectionForm'
-        action='/makeCollection'
+        <form onSubmit={(e) => handleDeck(e, props.triggerReload)}
+        name='deckForm'
+        action='/makeDeck'
         method='POST'
-        className='domoForm'>
-            <label htmlFor='collName'>New Collection: </label>
-            <input type="text" id="collName" placeholder='Collection Name' name='collName'/>
-            <input type="submit" className="makeDomoSubmit" value='Create Collection'/>
+        className='deckForm'>
+            <label htmlFor='deckName'>New Deck: </label>
+            <input type="text" id="deckName" placeholder='Deck Name' name='deckName'/>
+            <input type="submit" className="makeTokenSubmit" value='Create Deck'/>
         </form>
     )
 }
 
-const CollectionList = (props) => {
-    // if props.collections is empty, use empty array for the state
-    const [collections, setCollections] = useState([] || props.collections);
+const DeckList = (props) => {
+    // if props.decks is empty, use empty array for the state
+    const [decks, setDecks] = useState([] || props.decks);
 
-    // effect that reloads collections from the server whenever reloadCollections
+    // effect that reloads decks from the server whenever reloadDecks
     // Changes, this occurs in the App Component
     useEffect(() => {
-        const loadCollectionsFromServer = async () => {
-            const response = await fetch('/getCollections');
+        const loadDecksFromServer = async () => {
+            const response = await fetch('/getDecks');
             const data = await response.json();
-            setCollections(data.collections);
+            setDecks(data.decks);
         };
-        loadCollectionsFromServer();
-    }, [props.reloadCollections]);
+        loadDecksFromServer();
+    }, [props.reloadDecks]);
 
-    if(collections.length === 0){
+    if(decks.length === 0){
         return (
-            <div className="domoList">
-                <h3 className="emptyDomo">No Collections</h3>
+            <div className="tokenList">
+                <h3 className="emptyToken">No Decks</h3>
             </div>
         );
     }
 
-    const collectionNodes = collections.map(collection => {
+    const deckNodes = decks.map(deck => {
         return (
-           <div key={collection._id}
-           className='domo'
-           onClick={() => props.onSelect(collection)} // when clicked use callback function onSelect
+           <div key={deck._id}
+           className='token'
+           onClick={() => props.onSelect(deck)} // when clicked use callback function onSelect
            style={{cursor: 'pointer'}}
            >
+            {/* TODO: replace image tag with something other than Domo */}
             <img src='/assets/img/domoface.jpeg' alt='domo face' className='domoFace'/>
-            <h3 className="domoName">Collection: {collection.name}</h3>
-            <h3 className="domoAge">Number of Domos: {collection.domos.length}</h3>
+            <h3 className="tokenName">Deck: {deck.name}</h3>
+            <h3 className="tokenAge">Number of Tokens: {deck.tokens.length}</h3>
            </div> 
         );
     });
 
     return (
-        <div className="domoList">
-            {collectionNodes}
+        <div className="tokenList">
+            {deckNodes}
         </div>
     )
 }
 
 const App = () => {
     // flag to trigger reloads from server
-    const[reloadCollections, setReloadCollections] = useState(false);
+    const[reloadDecks, setReloadDecks] = useState(false);
 
-    // flag to tell app which collection is selected
-    const [selectedCollection, setSelectedCollection] = useState(null);
+    // flag to tell app which deck is selected
+    const [selectedDeck, setSelectedDeck] = useState(null);
 
     return (
         <div>
-            <div id="makeCollection">
-                <CollectionForm triggerReload={()=> setReloadCollections(!reloadCollections)}/>
+            <div id="makeDeck">
+                <DeckForm triggerReload={()=> setReloadDecks(!reloadDecks)}/>
             </div>
 
             <div className="container">
-                <div className="domos">
-                    <h2>Your Collections:</h2>
-                    <CollectionList reloadCollections={reloadCollections}
-                    onSelect={(coll) => setSelectedCollection(coll)} // when clicked on, selectedCollection is changed
+                <div className="tokens">
+                    <h2>Your Decks:</h2>
+                    <DeckList reloadDecks={reloadDecks}
+                    onSelect={(deck) => setSelectedDeck(deck)} // when clicked on, selectedDeck is changed
                     />
                 </div>
 
                 <hr/>
 
-                {/* Using conditional rendering, if a selected Collection exists
-                    Render the DomoForm and display Domos
+                {/* Using conditional rendering, if a selected Deck exists
+                    Render the TokenForm and display Tokens
                 */}
-                {selectedCollection && (
-                    <div id="selectedCollection">
-                        <h2>Viewing: {selectedCollection.name}</h2>
+                {selectedDeck && (
+                    <div id="selectedDeck">
+                        <h2>Viewing: {selectedDeck.name}</h2>
 
-                        {/* give user ability to add domos */}
-                        <div id="makeDomo">
-                            <DomoForm collectionID = {selectedCollection._id}
-                            triggerReload={async () => setReloadCollections(!reloadCollections)}
+                        {/* give user ability to add tokens */}
+                        <div id="makeToken">
+                            <TokenForm deckID = {selectedDeck._id}
+                            triggerReload={async () => setReloadDecks(!reloadDecks)}
                             />
                         </div>
 
-                        {/* Show Domos */}
-                        <div className="domos">
-                            <DomoList reloadDomos={reloadCollections} collectionID={selectedCollection._id}/>
+                        {/* Show Tokens */}
+                        <div className="tokens">
+                            <TokenList reloadTokens={reloadDecks} deckID={selectedDeck._id}/>
                         </div>
                         
                     </div>
                 )}
 
-                {/* If there is no selected Collection Render something else */}
-                {!selectedCollection && (
-                    <h3 className="emptyDomo">Select a collection to add or view</h3>
+                {/* If there is no selected Deck Render something else */}
+                {!selectedDeck && (
+                    <h3 className="emptyToken">Select a deck to add or view</h3>
                 )}
 
 

@@ -2,12 +2,12 @@ const controllers = require('./controllers');
 const mid = require('./middleware');
 
 const router = (app) => {
-    app.get('/maker', mid.requiresLogin, controllers.Domo.makerPage);
-    app.post('/maker', mid.requiresLogin, controllers.Domo.makeDomo);
+    app.get('/maker', mid.requiresLogin, controllers.Token.makerPage);
+    app.post('/maker', mid.requiresLogin, controllers.Token.addToken);
 
-    app.get('/getDeck', mid.requiresLogin, controllers.DomoCollection.getCollection);
-    app.get('/getDecks', mid.requiresLogin, controllers.DomoCollection.getCollections);
-    app.post('/makeDeck', mid.requiresLogin, controllers.DomoCollection.makeCollection);
+    app.get('/getDeck', mid.requiresLogin, controllers.TokenDeck.getDeck);
+    app.get('/getDecks', mid.requiresLogin, controllers.TokenDeck.getDecks);
+    app.post('/makeDeck', mid.requiresLogin, controllers.TokenDeck.makeDeck);
 
     app.get('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
     app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);

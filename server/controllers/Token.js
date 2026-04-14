@@ -1,20 +1,19 @@
 const models= require('../models');
 const Token = models.Token;
-const DomoCollection = models.DomoCollection;
+const TokenDeck = models.TokenDeck;
 
 const makerPage = async (req, res) => {
     return res.render('app');
 };
 
 const addToken = async (req, res) => {
-    if(!req.body.name || !req.body.age || !req.body.level || !req.body.deckID) {
+    if(!req.body.name || !req.body.deckID) {
         return res.status(400).json({error: 'All fields are required!'});
     }
 
     const tokenData = {
         name: req.body.name, 
-        age: req.body.age, 
-        level: req.body.level, 
+        imageString: "Some String",
         owner: req.session.account._id,
     };
 
@@ -22,7 +21,7 @@ const addToken = async (req, res) => {
         const newToken = new Token(tokenData);
         const savedToken = await newToken.save();
 
-        // Push domo's ID into it's respective collection array
+        // Push token's ID into it's respective Deck array
         // find the one to update via it's ID and ensure the owner
         // is logged in user
         await TokenDeck.updateOne(
@@ -42,6 +41,5 @@ const addToken = async (req, res) => {
 
 module.exports = {
     makerPage,
-    makeDomo,
-    getDomos
+    addToken,
 };

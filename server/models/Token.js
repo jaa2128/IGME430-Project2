@@ -6,7 +6,7 @@ const setName = (name) => _.escape(name).trim();
 const TokenSchema = new mongoose.Schema({
     name: {
         type: String,
-        required, 
+        required: true, 
         trim: true,
         set: setName
     },
