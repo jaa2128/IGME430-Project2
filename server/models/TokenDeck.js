@@ -4,16 +4,16 @@ const _ = require('underscore');
 const setName = (name) => _.escape(name).trim();
 
 // Schema to describe a Domo Collection
-const DomoCollectionSchema = new mongoose.Schema({
+const TokenDeckSchema = new mongoose.Schema({
     name:{
         type: String,
         required: true,
         trim: true,
         set: setName,
     },
-    domos: [{
+    tokens: [{
         type: mongoose.Schema.ObjectId, 
-        ref: 'Domo',
+        ref: 'Token',
     }],
     owner: {
         type: mongoose.Schema.ObjectId,
@@ -26,10 +26,10 @@ const DomoCollectionSchema = new mongoose.Schema({
     },
 })
 
-DomoCollectionSchema.statics.toAPI = (doc) => ({
+TokenDeckSchema.statics.toAPI = (doc) => ({
     name: doc.name,
-    domos: doc.domos,
+    tokens: doc.tokens,
 });
 
-const DomoCollectionModel = mongoose.model('DomoCollection', DomoCollectionSchema);
-module.exports = DomoCollectionModel;
+const TokenDeckModel = mongoose.model('TokenDeck', TokenDeckSchema);
+module.exports = TokenDeckModel;
