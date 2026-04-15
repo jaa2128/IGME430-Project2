@@ -1,7 +1,12 @@
 const helper = require('./helper.js');
+// Base React
 const React = require('react');
 const {useState, useEffect} = React;
 const {createRoot} = require('react-dom/client');
+
+// React Router
+const ReactRouterDOM = require('react-router-dom');
+const { BrowserRouter, Routes, Route, Link, useNavigate, useParams} = ReactRouterDOM;
 
 // Function to handle post requests to create a new Token
 // pass in deckID to know which deck to add a Token to it
@@ -35,6 +40,7 @@ const handleDeck = (e, onDeckAdded) => {
     helper.sendPost(e.target.action, {name}, onDeckAdded);
 }
 
+// Func Component representing a Form to create a Token
 const TokenForm = (props) => {
     return(
         <form id='tokenForm'
@@ -51,6 +57,7 @@ const TokenForm = (props) => {
     );
 };
 
+// Func Component representing a List of Tokens
 const TokenList = (props) => {
     
     const [tokens, setTokens] = useState([]);
@@ -93,13 +100,14 @@ const TokenList = (props) => {
     )
 }
 
+// Func Component representing a Form to create a Deck
 const DeckForm = (props) => {
     return (
         <form onSubmit={(e) => handleDeck(e, props.triggerReload)}
         name='deckForm'
         action='/makeDeck'
         method='POST'
-        className='deckForm'>
+        className='tokenForm'>
             <label htmlFor='deckName'>New Deck: </label>
             <input type="text" id="deckName" placeholder='Deck Name' name='deckName'/>
             <input type="submit" className="makeTokenSubmit" value='Create Deck'/>
@@ -107,6 +115,7 @@ const DeckForm = (props) => {
     )
 }
 
+// Func Component representing a List of Decks
 const DeckList = (props) => {
     // if props.decks is empty, use empty array for the state
     const [decks, setDecks] = useState([] || props.decks);
@@ -152,65 +161,84 @@ const DeckList = (props) => {
     )
 }
 
-const App = () => {
-    // flag to trigger reloads from server
-    const[reloadDecks, setReloadDecks] = useState(false);
+// Func Component representing a whole 'page' where user can make and view Decks
+const DeckMakerView = (props) => {
 
-    // flag to tell app which deck is selected
-    const [selectedDeck, setSelectedDeck] = useState(null);
+    const [reloadDecks, setReloadDecks] = useState(false);
+    const navigate = useNavigate();
 
     return (
         <div>
-            <div id="makeDeck">
+            {/* Deck Form */}
+             <div id="makeDeck">
                 <DeckForm triggerReload={()=> setReloadDecks(!reloadDecks)}/>
             </div>
 
-            <div className="container">
-                <div className="tokens">
-                    <h2>Your Decks:</h2>
-                    <DeckList reloadDecks={reloadDecks}
-                    onSelect={(deck) => setSelectedDeck(deck)} // when clicked on, selectedDeck is changed
-                    />
-                </div>
-
-                <hr/>
-
-                {/* Using conditional rendering, if a selected Deck exists
-                    Render the TokenForm and display Tokens
-                */}
-                {selectedDeck && (
-                    <div id="selectedDeck">
-                        <h2>Viewing: {selectedDeck.name}</h2>
-
-                        {/* give user ability to add tokens */}
-                        <div id="makeToken">
-                            <TokenForm deckID = {selectedDeck._id}
-                            triggerReload={async () => setReloadDecks(!reloadDecks)}
-                            />
-                        </div>
-
-                        {/* Show Tokens */}
-                        <div className="tokens">
-                            <TokenList reloadTokens={reloadDecks} deckID={selectedDeck._id}/>
-                        </div>
-                        
-                    </div>
-                )}
-
-                {/* If there is no selected Deck Render something else */}
-                {!selectedDeck && (
-                    <h3 className="emptyToken">Select a deck to add or view</h3>
-                )}
-
-
+            {/* List of Decks */}
+            <div className="tokens">
+                <h2>Your Decks:</h2>
+                    
+                {/* When a Deck in the DeckList is clicked on, navigate to that deck's view */}
+                <DeckList reloadDecks={reloadDecks}
+                onSelect={(deck) => navigate(`/collection/${deck._id}`)} 
+                />
             </div>
+        </div>
+    );
+}
+
+// Func Component representing a whole 'page' where users can make and add Tokens to a respective Deck
+const DeckView = () => {
+    // Grabs Deck Id from the URL (/collection/:id)
+    const {id} = useParams();
+    const [reloadDeck, setReloadDeck] = useState(false); // flag to reload Deck from server
+    const [name, setName] = useState(''); // used to set name when viewing the deck
+
+    // Fetches the name for the UI
+    useEffect(() => {
+        const fetchName = async () => {
+            const response = await fetch (`/getDeck?id=${id}`);
+            const data = await response.json();
+            setName(data.deck.name);
+        };
+        fetchName();
+    }, [id]);
+
+    return(
+        <div id='selectedDeck'>
+            <Link to='/maker'>
+                &lt; Back to Collections            
+            </Link>
+            <h2>Viewing: {name}</h2>
+            <div className="makeToken">
+                <TokenForm deckID={id} triggerReload={() => setReloadDeck(!reloadDeck)} />
+            </div>
+            <div className="tokens">
+                <TokenList reloadTokens={reloadDeck} deckID={id}/>
+            </div>
+        </div>
+    )
+}
+
+
+const App = () => {
+    return (
+        <div>
+            <Routes>
+                <Route path='/maker' element={<DeckMakerView/>}/>
+
+                <Route path='/collection/:id' element={<DeckView/>}/>
+            </Routes>
         </div>
     );
 };
 
 const init = () => {
     const root = createRoot(document.getElementById('app'));
-    root.render(<App/>);
+    // wrap App in BrowserRouter to enable Routing using React
+    root.render(<BrowserRouter>
+                    <App/>
+                </BrowserRouter>);
 }
 
 window.onload = init;
