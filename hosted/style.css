@@ -96,7 +96,7 @@ nav:nth-child(1) {
     border: 2px solid #55acee;
     border-radius: 4px;
     margin: 0 auto;
-    margin-top: 100px;
+    margin-top: auto;
 }
 
 .mainForm {
@@ -160,27 +160,18 @@ nav:nth-child(1) {
     display: none;
 }
 
-#domoMessage {
+#appMessage {
     top: 250px;
     width: 250px;
-    height: 650px;
-    position: absolute;
+    margin: auto;
     z-index: 200;
     right: 0px;
     overflow: hidden;
 }
 
-#domoMessage h3 {
-    width: 200px;
-    position: absolute;
+#appMessage h3 {
     top: 0px;
     left: 20px;
-}
-
-#speech {
-    height: 120px;
-    width: 250px;
-    z-index:300;
 }
 
 #errorMessage {

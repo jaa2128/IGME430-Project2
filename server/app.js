@@ -10,6 +10,9 @@ const session = require('express-session');
 const RedisStore = require('connect-redis').RedisStore;
 const redis = require('redis');
 
+// Scryfall API wrapper, makes it easier to make calls to Scryfall API
+const scryfall = require('scryfall-client');
+
 const router = require('./router.js');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
@@ -28,6 +31,9 @@ const redisClient = redis.createClient({
 redisClient.on('error', err => console.log('Redis Client Error', err));
 
 redisClient.connect().then(() => {
+    // set user agent per scryfall api guidelines
+    scryfall.setUserAgent('MTGTokenManagerJA/1.0.0');
+
     const app = express();
 
     app.use(helmet());

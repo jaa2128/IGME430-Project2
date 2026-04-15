@@ -33,7 +33,7 @@ const handleDeck = (e, onDeckAdded) => {
     const name = e.target.querySelector('#deckName').value;
 
     if(!name){
-        helper.handleError('Collection name required');
+        helper.handleError('Deck name required');
         return false;
     }
 
@@ -87,7 +87,7 @@ const TokenList = (props) => {
         return (
             <div key={token._id} className='token'>
                 {/* TODO: replace image tag with something other than Domo */}
-                <img src="/assets/img/domoface.jpeg" alt="domo face" className="domoFace" />
+                <img src="/assets/img/cards.png" alt="domo face" className="domoFace" />
                 <h3 className="tokenName">Name: {token.name}</h3>
             </div>
         )
@@ -147,7 +147,7 @@ const DeckList = (props) => {
            style={{cursor: 'pointer'}}
            >
             {/* TODO: replace image tag with something other than Domo */}
-            <img src='/assets/img/domoface.jpeg' alt='domo face' className='domoFace'/>
+            <img src='/assets/img/cards.png' alt='domo face' className='domoFace'/>
             <h3 className="tokenName">Deck: {deck.name}</h3>
             <h3 className="tokenAge">Number of Tokens: {deck.tokens.length}</h3>
            </div> 
@@ -172,6 +172,10 @@ const DeckMakerView = (props) => {
             {/* Deck Form */}
              <div id="makeDeck">
                 <DeckForm triggerReload={()=> setReloadDecks(!reloadDecks)}/>
+            </div>
+
+            <div id="appMessage" class='hidden'>
+                <h3><span id="errorMessage"></span></h3>
             </div>
 
             {/* List of Decks */}
