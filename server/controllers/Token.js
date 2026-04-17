@@ -43,7 +43,30 @@ const addToken = async (req, res) => {
     }
 }
 
+const deleteToken = async (req, res) => {
+     // ensure all fields are sent
+    if(!req.body.deckID || !req.body.tokenID) {
+        return res.status(400).json({error: 'All fields are required!'});
+    }
+
+    // try to delete 
+    try{
+        await TokenDeck.updateOne(
+            {_id: req.body.deckID, owner: req.session.account._id},
+            { $pull: {tokens: req.body.tokenID}}
+        );
+
+        return res.status(204);
+    }
+
+    catch (err) {
+        console.log(err);
+        return res.status(500).json({error: 'An error occured while deleting Token!'});
+    }
+}
+
 module.exports = {
     makerPage,
     addToken,
+    deleteToken
 };

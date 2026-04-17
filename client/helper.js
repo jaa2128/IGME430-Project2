@@ -41,7 +41,7 @@ const hideError = () => {
 
 
 module.exports = {
-    sendPost: sendRequest,
+    sendRequest,
     handleError,
     hideError,
 };

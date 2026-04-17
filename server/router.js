@@ -5,6 +5,8 @@ const router = (app) => {
     app.get('/maker', mid.requiresLogin, controllers.Token.makerPage);
     app.post('/maker', mid.requiresLogin, controllers.Token.addToken);
 
+    app.delete('/deleteToken', mid.requiresLogin, controllers.Token.deleteToken);
+
     app.get('/getDeck', mid.requiresLogin, controllers.TokenDeck.getDeck);
     app.get('/getDecks', mid.requiresLogin, controllers.TokenDeck.getDecks);
     app.post('/makeDeck', mid.requiresLogin, controllers.TokenDeck.makeDeck);

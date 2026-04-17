@@ -1,6 +1,24 @@
+const helper = require('../helper.js');
+
 // Base React
 const React = require('react');
 const {useState, useEffect} = React;
+
+/**
+ * Function to handle delete requests to delete a new Token
+ * pass in deckID to know which deck to delete a Token from
+ * @param {Object} selectedToken - The selected token to delete from Deck
+ * @param {Function} onTokenDeleted - Callback function to trigger upon function call
+ * @param {String} deckID - Id of the deck the token will be removed from
+ * @returns 
+ */
+const handleDeleteToken = (selectedToken, onTokenDeleted, deckID) => {
+    const tokenID = selectedToken._id;
+
+    helper.sendRequest('DELETE', '/deleteToken', {deckID, tokenID}, onTokenDeleted);
+    return false;
+}
+
 
 /**
  * Func Component representing a List of Tokens in a Deck
@@ -36,8 +54,14 @@ const TokenList = (props) => {
     const tokenNodes = tokens.map(token => {
         return (
             <div key={token._id} className='token'>
-                {/* TODO: replace image tag with something other than Domo */}
                 <img src={token.imageString} alt="card face" className="cardFace" />
+
+                {/* delete Token component */}
+                <div className="deleteToken" 
+                onClick={() => handleDeleteToken(token, props.reloadTokens, props.deckID)}
+                >
+                    <span className='delete'>-</span>
+                </div>
             </div>
         )
     });
