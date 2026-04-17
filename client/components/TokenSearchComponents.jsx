@@ -14,9 +14,9 @@ const handleSetSearch = async (e, onResultsFound) => {
     e.preventDefault();
     helper.hideError();
 
-    // grab set code and name
-    const setCode = e.target.querySelector('#setCode').value;
-    const setName = e.target.querySelector('#setName').value;
+    // grab set code and name trim and remove spaces
+    const setCode = e.target.querySelector('#setCode').value.trim().replaceAll(' ', '');
+    const setName = e.target.querySelector('#setName').value.trim().replaceAll(' ', '');
 
     // if neither are present display error
     if(!setCode && !setName){

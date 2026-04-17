@@ -20,7 +20,7 @@ const handleDeck = (e, onDeckAdded) => {
         return false;
     }
 
-    helper.sendPost(e.target.action, {name}, onDeckAdded);
+    helper.sendRequest('POST', e.target.action, {name}, onDeckAdded);
 }
 
 /**

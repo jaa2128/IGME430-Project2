@@ -13,9 +13,6 @@ const {DeckForm, DeckList} = require('./components/DeckComponents.jsx');
 const {TokenList} = require('./components/TokenComponents.jsx');
 const {TokenSetSearchForm} = require('./components/TokenSearchComponents.jsx');
 
-
-
-
 /**
  * Function to handle post requests to create a new Token
  * pass in deckID to know which deck to add a Token to it
@@ -30,7 +27,7 @@ const handleToken = (selectedToken, onTokenAdded, deckID) => {
     const name = selectedToken.name;
     const imageString = selectedToken.imageString;
 
-    helper.sendPost('/maker', {name, imageString, deckID}, onTokenAdded);
+    helper.sendRequest('POST', '/maker', {name, imageString, deckID}, onTokenAdded);
     return false;
 }
 
