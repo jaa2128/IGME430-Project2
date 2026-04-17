@@ -7,13 +7,13 @@ const makerPage = async (req, res) => {
 };
 
 const addToken = async (req, res) => {
-    if(!req.body.name || !req.body.deckID) {
+    if(!req.body.name || !req.body.deckID || !req.body.imageString) {
         return res.status(400).json({error: 'All fields are required!'});
     }
 
     const tokenData = {
         name: req.body.name, 
-        imageString: "Some String",
+        imageString: req.body.imageString,
         owner: req.session.account._id,
     };
 

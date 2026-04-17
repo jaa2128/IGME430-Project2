@@ -16,8 +16,15 @@ const router = (app) => {
 
     app.get('/logout', mid.requiresLogin, controllers.Account.logout);
 
+    app.get('/getTokensFromSet', controllers.ScryfallProxy.getTokensfromSet);
+
 
     app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
+
+    // handle uncaught routes, prevents /collection refreshes from sending 404s
+    app.get('/{*splat}', mid.requiresLogin, (req, res) => {
+        res.render('app'); 
+    });
 };
 
 module.exports = router;

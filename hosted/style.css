@@ -91,7 +91,7 @@ nav:nth-child(1) {
 }
 
 .tokens {
-    width: 40%;
+    width: fit-content;
     min-width: 600px;
     border: 2px solid #55acee;
     border-radius: 4px;
@@ -192,29 +192,27 @@ nav:nth-child(1) {
     transform: rotate(330deg);
 }
 
-.token {
-    width: 40%;
-    min-width: 600px;
-    border: 2px solid #55acee;
-    border-radius: 4px;
-    margin: 0 auto;
-    margin-top: 100px;
-}
 
 .token{
-    display:flex;
     align-items: center;
     justify-content: space-between;
-    width: 95%;
-    margin: 10px auto;
-    margin-top: 2px;
-    margin-bottom: 2px;
+    width: fit-content;
+    margin-top: 5px;
+    margin-bottom: 5px;
     border: 2px solid #55acee;
     border-radius: 4px;
     background-color: #55acee;
     padding: 10px;
     min-height:60px;
     overflow: hidden;
+}
+
+.token:first-child{
+    margin-left: 5px;
+}
+
+.token:last-child{
+    margin-right: 5px;
 }
 
 .token:hover {
@@ -227,8 +225,7 @@ nav:nth-child(1) {
 img.domoFace {
     margin-left: 25px;
     margin-right: 10px;
-    height: 50px;
-    width: 50px;
+    max-width: 200px;
     border-radius: 4px;
     float:left;
     flex: 0;
@@ -254,10 +251,8 @@ h3.tokenName {
     width: 200px;
 }
 
-.token:first-child {
-    margin-top: 10px;
-}
-
-.token:last-child {
-    margin-bottom:10px;
+.tokenList{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
 }

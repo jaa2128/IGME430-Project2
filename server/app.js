@@ -11,7 +11,7 @@ const RedisStore = require('connect-redis').RedisStore;
 const redis = require('redis');
 
 // Scryfall API wrapper, makes it easier to make calls to Scryfall API
-const scryfall = require('scryfall-client');
+const scryfall = require("scryfall-client").default;
 
 const router = require('./router.js');
 
@@ -31,12 +31,19 @@ const redisClient = redis.createClient({
 redisClient.on('error', err => console.log('Redis Client Error', err));
 
 redisClient.connect().then(() => {
+
     // set user agent per scryfall api guidelines
     scryfall.setUserAgent('MTGTokenManagerJA/1.0.0');
 
     const app = express();
 
-    app.use(helmet());
+    app.use(helmet({
+        contentSecurityPolicy: {
+            directives: {
+                "img-src": ["'self'", 'data:', 'https://cards.scryfall.io']
+            }
+        }
+    }));
     app.use('/assets', express.static(path.resolve(`${__dirname}/../hosted`)));
     app.use(favicon(`${__dirname}/../hosted/img/favicon.png`));
     app.use(compression());
