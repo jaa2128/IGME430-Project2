@@ -32,6 +32,7 @@ const searchBySetParam = (setParam) => {
     .catch(()=>null)
 }
 
+// Controller function to get tokens from a set requested by the user
 const getTokensfromSet = async (req, res) => {
 
     // grab query params
