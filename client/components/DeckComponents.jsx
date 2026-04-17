@@ -3,7 +3,12 @@ const helper = require('../helper.js');
 const React = require('react');
 const {useState, useEffect} = React;
 
-// function to handle post request to create a Token Deck
+/**
+ * function to handle post request to create a Token Deck
+ * @param {HTMLFormElement} e - the Form this function is called by
+ * @param {Function} onDeckAdded - callback function to be called upon this function's call
+ * @returns - false if there is error, nothing if successful, essentially void
+ */
 const handleDeck = (e, onDeckAdded) => {
     e.preventDefault();
     helper.hideError();
@@ -18,7 +23,11 @@ const handleDeck = (e, onDeckAdded) => {
     helper.sendPost(e.target.action, {name}, onDeckAdded);
 }
 
-// Func Component representing a Form to create a Deck
+/**
+ * Func Component representing a Form to create a Deck
+ * @param {object} props - This components properties
+ * @returns - A Form to create a new Deck
+ */
 const DeckForm = (props) => {
     return (
         <form onSubmit={(e) => handleDeck(e, props.triggerReload)}
@@ -33,7 +42,11 @@ const DeckForm = (props) => {
     )
 }
 
-// Func Component representing a List of Decks
+/**
+ * Func Component representing a List of Decks
+ * @param {object} props - This components properties
+ * @returns - A list of this account's deck html components
+ */
 const DeckList = (props) => {
     // if props.decks is empty, use empty array for the state
     const [decks, setDecks] = useState([] || props.decks);

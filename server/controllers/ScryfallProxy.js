@@ -1,7 +1,11 @@
 const scryfall = require('scryfall-client').default;
 
-// Helper function to simply grab tokens based off some set param
-// can either be a set code or set name
+/**
+ * Helper function to simply grab tokens based off some set param
+ * can either be a set code or set name
+ * @param {String} setParam 
+ * @returns {Array} - array of Tokens returned by scryfall search
+ */
 const searchBySetParam = (setParam) => {
 
     // ask scryfall-client to attempt to get a set from 

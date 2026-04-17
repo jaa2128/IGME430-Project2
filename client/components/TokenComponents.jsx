@@ -2,8 +2,11 @@
 const React = require('react');
 const {useState, useEffect} = React;
 
-
-// Func Component representing a List of Tokens in a Deck
+/**
+ * Func Component representing a List of Tokens in a Deck
+ * @param {object} props - This components properties
+ * @returns - A List of this deck's Token html elements
+ */
 const TokenList = (props) => {
     
     const [tokens, setTokens] = useState([]);
@@ -17,11 +20,8 @@ const TokenList = (props) => {
             const data = await response.json();
             setTokens(data.deck.tokens || []);
         };
-
-        if(props.deckID){
-            loadTokensFromDeck();
-        }
-    }, [props.reloadTokens, props.deckID]);
+        loadTokensFromDeck();
+    }, [props.reloadTokens]);
 
     // If there are no tokens
     if(tokens.length === 0){
@@ -32,12 +32,12 @@ const TokenList = (props) => {
         );
     }
 
-    // Create a bunch of nodes to display tokens
+    // if there are tokens create a bunch of nodes to display tokens
     const tokenNodes = tokens.map(token => {
         return (
             <div key={token._id} className='token'>
                 {/* TODO: replace image tag with something other than Domo */}
-                <img src={token.imageString} alt="domo face" className="domoFace" />
+                <img src={token.imageString} alt="card face" className="cardFace" />
             </div>
         )
     });

@@ -4,7 +4,12 @@ const helper = require('../helper.js');
 const React = require('react');
 const {useState, useEffect} = React;
 
-// function to handle searches for a Token Set
+/**
+ * function to handle searches for a Token Set
+ * @param {HTMLFormElement} e - the Form this function is called by
+ * @param {Function} onResultsFound - callback function to be called upon this function's call
+ * @returns - all tokens found within this search request
+ */
 const handleSetSearch = async (e, onResultsFound) => {
     e.preventDefault();
     helper.hideError();
@@ -26,7 +31,11 @@ const handleSetSearch = async (e, onResultsFound) => {
     onResultsFound(data.tokens);
 }
 
-// Component meant to represent List of Search Results
+/**
+ * Component meant to represent List of Search Results
+ * @param {object} props - This components properties
+ * @returns - A List of Token html elements
+ */
 const SearchList = (props) => {
     // Since tokens will be passed in, no need for hook
     const tokens = props.tokens || [];
@@ -44,11 +53,11 @@ const SearchList = (props) => {
             <div 
                 key={token.id}
                 className='token'
-                onClick={() => props.onTokenSelect(token)} // when clicked
+                onClick={() => props.onTokenSelect(token)} // when clicked pass the token to the callback function
                 style={{cursor: 'pointer'}}
             >
                 {/* Use the token's image String to display */}
-                <img src={token.imageString} alt='card' className='domoFace'/>
+                <img src={token.imageString} alt='card face' className='cardFace'/>
                 <h3 className='tokenName'>{token.name}</h3>
             </div>
         )
@@ -61,6 +70,11 @@ const SearchList = (props) => {
     )
 }
 
+/**
+ * Component meant to represent the Search form for a Token Set
+ * @param {object} props - This components properties
+ * @returns - A List of Token html elements
+ */
 const TokenSetSearchForm = (props) => {
     const [results, setResults] = useState([]);
 
@@ -80,7 +94,10 @@ const TokenSetSearchForm = (props) => {
             {/* Display the results from the search */}
             <div className="searchResults">
                 <h2>Search Results:</h2>
-                <SearchList tokens={results} onTokenSelect={(token) => props.onTokenSelect(token)}/>
+
+                {/* sends token it receives to its own callback function */}
+                <SearchList tokens={results} 
+                onTokenSelect={(token) => props.onTokenSelect(token)}/> 
             </div>
         </div>
     )

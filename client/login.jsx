@@ -2,6 +2,11 @@ const helper = require('./helper.js');
 const React = require('react');
 const {createRoot} = require('react-dom/client');
 
+/**
+ * function to handle user login
+ * @param {HTMLFormElement} e - the Form this function is called by
+ * @returns - false if there is error, nothing if successful, essentially void
+ */
 const handleLogin = (e) => {
     e.preventDefault();
     helper.hideError();
@@ -18,6 +23,11 @@ const handleLogin = (e) => {
     return false;
 }
 
+/**
+ * function to handle user signup
+ * @param {HTMLFormElement} e - the Form this function is called by
+ * @returns - false if there is error, nothing if successful, essentially void
+ */
 const handleSignup = (e) => {
     e.preventDefault();
     helper.hideError();
@@ -40,6 +50,11 @@ const handleSignup = (e) => {
     return false;
 }
 
+/**
+ * Func Component representing a Form to Login
+ * @param {object} props - This components properties
+ * @returns - A Form to Login
+ */
 const LoginWindow = (props) => {
     return (
         <form id = "loginForm"
@@ -58,6 +73,11 @@ const LoginWindow = (props) => {
     );
 }
 
+/**
+ * Func Component representing a Form to Signup
+ * @param {object} props - This components properties
+ * @returns - A Form to Signup
+ */
 const SignupWindow = (props) => {
     return (
          <form id = "signupForm"

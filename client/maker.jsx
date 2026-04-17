@@ -8,13 +8,22 @@ const {createRoot} = require('react-dom/client');
 const ReactRouterDOM = require('react-router-dom');
 const { BrowserRouter, Routes, Route, Link, useNavigate, useParams} = ReactRouterDOM;
 
+// Imported Components
 const {DeckForm, DeckList} = require('./components/DeckComponents.jsx');
 const {TokenList} = require('./components/TokenComponents.jsx');
 const {TokenSetSearchForm} = require('./components/TokenSearchComponents.jsx');
 
 
-// Function to handle post requests to create a new Token
-// pass in deckID to know which deck to add a Token to it
+
+
+/**
+ * Function to handle post requests to create a new Token
+ * pass in deckID to know which deck to add a Token to it
+ * @param {Object} selectedToken - The selected token to add to Deck
+ * @param {Function} onTokenAdded - Callback function to trigger upon function call
+ * @param {String} deckID - Id of the deck the token will be added to
+ * @returns 
+ */
 const handleToken = (selectedToken, onTokenAdded, deckID) => {
     helper.hideError();
 
@@ -25,7 +34,10 @@ const handleToken = (selectedToken, onTokenAdded, deckID) => {
     return false;
 }
 
-// Func Component representing a whole 'page' where user can make and view Decks
+/**
+ * Func Component representing a whole 'page' where user can make and view Decks
+ * @returns The entire Deck Creator View
+ */
 const DeckMakerView = () => {
 
     const [reloadDecks, setReloadDecks] = useState(false);
@@ -55,7 +67,11 @@ const DeckMakerView = () => {
     );
 }
 
-// Func Component representing a whole 'page' where users can make and add Tokens to a respective Deck
+
+/**
+ * Func Component representing a whole 'page' where users can make and add Tokens to a respective Deck
+ * @returns the entire Deck View
+ */
 const DeckView = () => {
     // Grabs Deck Id from the URL (/collection/:id)
     const {id} = useParams();
@@ -87,6 +103,8 @@ const DeckView = () => {
 
             {isSearching && (
                 <div className="searchArea">
+                        {/* Complete onTokenSelect Chain by defining the Form's onTokenSelect 
+                            callback function */}
                         <TokenSetSearchForm onTokenSelect={(selectedToken) => {
                             handleToken(selectedToken, () => {
                                 setReloadDeck(!reloadDeck);

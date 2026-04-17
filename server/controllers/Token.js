@@ -6,11 +6,15 @@ const makerPage = async (req, res) => {
     return res.render('app');
 };
 
+// Controller function to add a Token to a Deck based off it's ID
 const addToken = async (req, res) => {
+
+    // ensure all fields are sent
     if(!req.body.name || !req.body.deckID || !req.body.imageString) {
         return res.status(400).json({error: 'All fields are required!'});
     }
 
+    // build the token
     const tokenData = {
         name: req.body.name, 
         imageString: req.body.imageString,
