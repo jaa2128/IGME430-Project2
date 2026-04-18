@@ -1,4 +1,3 @@
-const { redirect } = require('react-router-dom');
 const models = require('../models');
 const Account = models.Account;
 

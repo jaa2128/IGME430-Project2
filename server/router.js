@@ -1,4 +1,3 @@
-const { get } = require('underscore');
 const controllers = require('./controllers');
 const mid = require('./middleware');
 
