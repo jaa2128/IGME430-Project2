@@ -115,7 +115,7 @@ nav:nth-child(1) {
     display: inline-block;
     width: 100px;
     margin-right: 10px;
-    text-align: right;
+    text-align: left;
     font-size: 1.2em;
 }
 
@@ -126,7 +126,7 @@ nav:nth-child(1) {
     margin: 0 auto;
     margin-top: 14px;
     font-size: 1.2em;
-    width: 100px;
+    width: fit-content;
     background-color: #55acee;
     border-radius: 2px;
     border-color: #66acee;
@@ -205,6 +205,7 @@ nav:nth-child(1) {
     padding: 10px;
     min-height:60px;
     overflow: hidden;
+    position: relative;
 }
 
 .token:first-child{
@@ -213,6 +214,43 @@ nav:nth-child(1) {
 
 .token:last-child{
     margin-right: 5px;
+}
+
+.deleteToken {
+    position:absolute;
+    top: -10px;
+    left: -10px;
+    width: 35px;
+    height: 35px;
+    background-color: rgba(255,255,255, 0.8);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+    border-radius: 5px;
+}
+
+.deleteIcon {
+    font-size: 1.8em;
+    font-weight: bold;
+
+    margin-left: 8px;
+    padding: 0;
+    line-height: 1;
+    display: inline-block;
+    text-align: center;
+}
+
+.token:hover .deleteToken{
+    display: flex;
+}
+
+.deleteToken:hover{
+    background-color: #ff0000;
+    align-items: center;
+    justify-content: center;
 }
 
 .token:hover {

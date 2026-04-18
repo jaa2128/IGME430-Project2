@@ -112,7 +112,7 @@ const DeckView = () => {
 
             {/* Always show Tokens in User's deck */}
             <div className="tokens">
-                <TokenList reloadTokens={reloadDeck} deckID={id}/>
+                <TokenList reloadTokens={reloadDeck} deckID={id} triggerReload={() => setReloadDeck(!reloadDeck)}/>
             </div>
         </div>
     )

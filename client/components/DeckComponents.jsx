@@ -80,7 +80,7 @@ const DeckList = (props) => {
            style={{cursor: 'pointer'}}
            >
             {/* TODO: replace image tag with something other than Domo */}
-            <img src='/assets/img/cards.png' alt='domo face' className='domoFace'/>
+            <img src='/assets/img/cards.png' alt='domo face' className='cardface'/>
             <h3 className="tokenName">Deck: {deck.name}</h3>
             <h3 className="tokenAge">Number of Tokens: {deck.tokens.length}</h3>
            </div> 

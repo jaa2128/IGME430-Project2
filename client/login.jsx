@@ -24,6 +24,34 @@ const handleLogin = (e) => {
 }
 
 /**
+ * function to handle resetting forgotten password
+ * @param {HTMLFormElement} e - the Form this function is called by
+ * @returns - false if there is error, nothing if successful, essentially void
+ */
+const handleResetForgottenPassword = (e) => {
+    e.preventDefault();
+    helper.hideError();
+
+    const username = e.target.querySelector('#user').value;
+    const pass = e.target.querySelector('#pass').value;
+    const pass2 = e.target.querySelector('#pass2').value;
+
+  
+    if(!username || !pass || !pass2) {
+        helper.handleError('All fields are required!');
+        return false;
+    }
+
+    if(pass !== pass2){
+        helper.handleError('New Passwords do not match!');
+        return false;
+    }
+
+    helper.sendRequest('POST', e.target.action, {username, pass, pass2});
+    return false;
+}
+
+/**
  * function to handle user signup
  * @param {HTMLFormElement} e - the Form this function is called by
  * @returns - false if there is error, nothing if successful, essentially void
@@ -57,19 +85,30 @@ const handleSignup = (e) => {
  */
 const LoginWindow = (props) => {
     return (
-        <form id = "loginForm"
+        <div className="mainForm">
+            <form id = "loginForm"
             name = "loginForm"
             onSubmit={handleLogin}
             action="/login"
             method='POST'
-            className='mainForm'
-        >
-            <label htmlFor='username'>Username: </label>
-            <input id='user' type="text" name='username' placeholder='username'/>
-            <label htmlFor="pass">Password: </label>
-            <input id='pass' type='password' name='pass' placeholder='password'/>
-            <input className='formSubmit' type="submit" value="Sign in" />
-        </form>
+            >
+                <label htmlFor='username'>Username: </label>
+                <input id='user' type="text" name='username' placeholder='username'/>
+                <label htmlFor="pass">Password: </label>
+                <input id='pass' type='password' name='pass' placeholder='password'/>
+                <input className='formSubmit' type="submit" value="Sign in" />
+            </form>
+
+            <a id="resetPasswordButton" 
+                onClick={(e) => {
+                    e.preventDefault();
+                    props.showForgotScreen();
+                }}
+                href=''
+            >Forgot Password?</a>
+        </div>
+        
+        
     );
 }
 
@@ -98,11 +137,33 @@ const SignupWindow = (props) => {
     );
 }
 
+const ForgotPasswordWindow = (props) => {
+    return (
+         <form id="forgotPasswordForm"
+            name="forgotPasswordForm"
+            onSubmit={handleResetForgottenPassword}
+            action="/resetForgottenPassword"
+            method='POST'
+            className='mainForm'
+        >
+            <label htmlFor='username'>Username: </label>
+            <input id='user' type="text" name='username' placeholder='username'/>
+            <label htmlFor="pass">Password: </label>
+            <input id='pass' type='password' name='pass' placeholder='new password'/>
+            <label htmlFor="pass">Password: </label>
+            <input id='pass2' type='password' name='pass2' placeholder='retype new password'/>
+            <input className='formSubmit' type="submit" value="Reset Password" />
+        </form>
+    );
+}
+
 const init = () => {
     const loginButton = document.getElementById('loginButton');
     const signupButton = document.getElementById('signupButton');
 
     const root = createRoot(document.getElementById('content'));
+
+    const showForgotScreen = () => root.render(<ForgotPasswordWindow/>);
 
     loginButton.addEventListener('click', (e) => {
         e.preventDefault();
@@ -116,7 +177,7 @@ const init = () => {
         return false;
     });
 
-    root.render(<LoginWindow/>);
+    root.render(<LoginWindow showForgotScreen={showForgotScreen}/>);
 };
 
 window.onload = init;

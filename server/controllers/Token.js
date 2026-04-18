@@ -51,12 +51,19 @@ const deleteToken = async (req, res) => {
 
     // try to delete 
     try{
+        // Remove Token from deck
         await TokenDeck.updateOne(
             {_id: req.body.deckID, owner: req.session.account._id},
             { $pull: {tokens: req.body.tokenID}}
         );
 
-        return res.status(204);
+        // Also Remove Token from Mongo entirely based of it's ID as to not waste space
+        await Token.deleteOne(
+            {_id: req.body.tokenID, owner: req.session.account._id}
+        );
+
+
+        return res.status(200).json({message: 'Token successfully deleted'});
     }
 
     catch (err) {

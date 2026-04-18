@@ -56,11 +56,14 @@ const TokenList = (props) => {
             <div key={token._id} className='token'>
                 <img src={token.imageString} alt="card face" className="cardFace" />
 
-                {/* delete Token component */}
+                {/* Delete Token component, when clicked on it performs a delete request
+                    While also triggering the triggerReload property which is defined
+                    in DeckView in maker.jsx, this updates the reloadTokens property which 
+                    triggers the effect to relaod the Token List */}
                 <div className="deleteToken" 
-                onClick={() => handleDeleteToken(token, props.reloadTokens, props.deckID)}
+                onClick={() => handleDeleteToken(token, props.triggerReload, props.deckID)} 
                 >
-                    <span className='delete'>-</span>
+                    <span className='deleteIcon'>-</span>
                 </div>
             </div>
         )
