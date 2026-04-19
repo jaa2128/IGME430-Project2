@@ -119,6 +119,13 @@ const DeckView = () => {
     )
 }
 
+/**
+ * Func Component representing a whole 'page' where users can make and add Tokens to a respective Deck
+ * @returns the entire Deck View
+ */
+const BoardView = () => {
+    
+}
 
 const App = () => {
     return (

@@ -31,6 +31,27 @@ const handleSetSearch = async (e, onResultsFound) => {
     onResultsFound(data.tokens);
 }
 
+
+/**
+ * Component meant to represent A Token found in a list of search results
+ * @param {object} props - This components properties
+ * @returns - A Token in the form of Html Elements
+ */
+const SearchResultToken = (props) => {
+    return (
+        <div 
+            key={props.token.id}
+            className='token'
+            onClick={props.onTokenSelect} // when clicked pass the token to the callback function
+            style={{cursor: 'pointer'}}
+        >
+            {/* Use the token's image String to display */}
+            <img src={props.token.imageString} alt='card face' className='cardFace'/>
+            <h3 className='tokenName'>{props.token.name}</h3>
+        </div>
+    )
+}
+
 /**
  * Component meant to represent List of Search Results
  * @param {object} props - This components properties
@@ -50,16 +71,8 @@ const SearchList = (props) => {
 
     const tokenNodes = tokens.map((token) => {
         return(
-            <div 
-                key={token.id}
-                className='token'
-                onClick={() => props.onTokenSelect(token)} // when clicked pass the token to the callback function
-                style={{cursor: 'pointer'}}
-            >
-                {/* Use the token's image String to display */}
-                <img src={token.imageString} alt='card face' className='cardFace'/>
-                <h3 className='tokenName'>{token.name}</h3>
-            </div>
+            // On tokenSelect callback is passed in from TokenSetSearchForm
+            <SearchResultToken token={token} onTokenSelect={props.onTokenSelect}/>
         )
     });
 
@@ -95,7 +108,8 @@ const TokenSetSearchForm = (props) => {
             <div className="searchResults">
                 <h2>Search Results:</h2>
 
-                {/* sends token it receives to its own callback function */}
+                {/* passes in the tokens found in search results and passes in the onTokenSelect
+                    callback function defined in DeckView in maker.jsx */}
                 <SearchList tokens={results} 
                 onTokenSelect={(token) => props.onTokenSelect(token)}/> 
             </div>

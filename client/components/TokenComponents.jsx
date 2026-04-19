@@ -19,6 +19,29 @@ const handleDeleteToken = (selectedToken, onTokenDeleted, deckID) => {
     return false;
 }
 
+/**
+ * Func Component representing a Token in a deck
+ * @param {object} props - This components properties
+ * @returns - A Token in the form of Html Elements as well as a button
+ * to delete the token from the deck
+ */
+const Token = (props) => {
+    return (
+        <div key={props.token._id} className='token'>
+                <img src={props.token.imageString} alt="card face" className="cardFace" />
+
+                {/* Delete Token Button, when clicked on it performs a delete request
+                    While also triggering the triggerReload property which is defined
+                    in DeckView in maker.jsx, this updates the reloadTokens property which 
+                    triggers the effect to reload the Token List */}
+                <button className="deleteToken" 
+                onClick={props.onDeleteClick} 
+                >
+                    <span className='deleteIcon'>-</span>
+                </button>
+            </div>
+    )
+}
 
 /**
  * Func Component representing a List of Tokens in a Deck
@@ -53,19 +76,7 @@ const TokenList = (props) => {
     // if there are tokens create a bunch of nodes to display tokens
     const tokenNodes = tokens.map(token => {
         return (
-            <div key={token._id} className='token'>
-                <img src={token.imageString} alt="card face" className="cardFace" />
-
-                {/* Delete Token component, when clicked on it performs a delete request
-                    While also triggering the triggerReload property which is defined
-                    in DeckView in maker.jsx, this updates the reloadTokens property which 
-                    triggers the effect to reload the Token List */}
-                <button className="deleteToken" 
-                onClick={() => handleDeleteToken(token, props.triggerReload, props.deckID)} 
-                >
-                    <span className='deleteIcon'>-</span>
-                </button>
-            </div>
+            <Token token={token} onDeleteClick={() => handleDeleteToken(token, props.triggerReload, props.deckID)}/>
         )
     });
 
