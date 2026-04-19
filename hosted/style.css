@@ -92,11 +92,12 @@ nav:nth-child(1) {
 
 .tokens {
     width: fit-content;
-    min-width: 600px;
+    max-width: 40%;
     border: 2px solid #55acee;
     border-radius: 4px;
     margin: 0 auto;
     margin-top: auto;
+    overflow: hidden;
 }
 
 .mainForm {
@@ -144,7 +145,7 @@ nav:nth-child(1) {
     background-color: #338acc;
 }
 
-#user, #pass, #pass2 {
+#user, #pass, #pass2, #oldPass{
     text-align: center;
     font-size: 1.1em;
     width: 180px;
@@ -181,21 +182,11 @@ nav:nth-child(1) {
     font-style: italic;
 }
 
-#domo {
-    z-index: 225;
-    margin-top: -20px;
-    margin-left: 135px;
-    height: 450px;
-    width: 300px;
-    -ms-transform: rotate(330deg);
-    -webkit-transform: rotate(330deg); 
-    transform: rotate(330deg);
-}
-
 
 .token{
     align-items: center;
     justify-content: space-between;
+    flex-shrink: 0;
     width: fit-content;
     margin-top: 5px;
     margin-bottom: 5px;
@@ -204,7 +195,6 @@ nav:nth-child(1) {
     background-color: #55acee;
     padding: 10px;
     min-height:60px;
-    overflow: hidden;
     position: relative;
 }
 
@@ -216,40 +206,35 @@ nav:nth-child(1) {
     margin-right: 5px;
 }
 
-.deleteToken {
+.deleteToken, .deleteDeck{
     position:absolute;
-    top: -10px;
-    left: -10px;
+    top: -1;
+    left: -1;
     width: 35px;
     height: 35px;
     background-color: rgba(255,255,255, 0.8);
     display: none;
-    align-items: center;
     justify-content: center;
     cursor: pointer;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    z-index: 10;
     border-radius: 5px;
+    border-style: none;
 }
 
 .deleteIcon {
     font-size: 1.8em;
     font-weight: bold;
-
-    margin-left: 8px;
     padding: 0;
-    line-height: 1;
     display: inline-block;
     text-align: center;
 }
 
-.token:hover .deleteToken{
+.token:hover .deleteToken, .token:hover .deleteDeck{
     display: flex;
 }
 
-.deleteToken:hover{
+.deleteToken:hover, .deleteDeck:hover{
     background-color: #ff0000;
-    align-items: center;
     justify-content: center;
 }
 
@@ -258,6 +243,14 @@ nav:nth-child(1) {
     border-color: rgba(255,255,255, 0.8);
     transition: background-color 2.6s ease-out;
     background-color: #66bfff;
+}
+
+
+/* For touchscreens, make the button always visible but perhaps slightly smaller */
+@media (hover: none) {
+    .deleteDeck, .deleteToken{
+        display: flex;
+    }
 }
 
 img.cardFace {
@@ -291,6 +284,13 @@ h3.tokenName {
 
 .tokenList{
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.dialogueWrapper{
+    display: flex;
+    justify-content: center;
 }

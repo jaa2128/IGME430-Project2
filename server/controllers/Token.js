@@ -2,10 +2,6 @@ const models= require('../models');
 const Token = models.Token;
 const TokenDeck = models.TokenDeck;
 
-const makerPage = async (req, res) => {
-    return res.render('app');
-};
-
 // Controller function to add a Token to a Deck based off it's ID
 const addToken = async (req, res) => {
 
@@ -73,7 +69,6 @@ const deleteToken = async (req, res) => {
 }
 
 module.exports = {
-    makerPage,
     addToken,
     deleteToken
 };

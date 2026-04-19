@@ -27,7 +27,7 @@ const handleToken = (selectedToken, onTokenAdded, deckID) => {
     const name = selectedToken.name;
     const imageString = selectedToken.imageString;
 
-    helper.sendRequest('POST', '/maker', {name, imageString, deckID}, onTokenAdded);
+    helper.sendRequest('POST', '/addToken', {name, imageString, deckID}, onTokenAdded);
     return false;
 }
 
@@ -58,6 +58,7 @@ const DeckMakerView = () => {
                 {/* When a Deck in the DeckList is clicked on, navigate to that deck's view */}
                 <DeckList reloadDecks={reloadDecks}
                 onSelect={(deck) => navigate(`/collection/${deck._id}`)} 
+                triggerReload={()=> setReloadDecks(!reloadDecks)}
                 />
             </div>
         </div>
@@ -90,7 +91,7 @@ const DeckView = () => {
 
     return(
         <div id='selectedDeck'>
-            <Link to='/maker'>&lt; Back to Collections</Link>
+            <Link to='/deckPage'>&lt; Back to Collections</Link>
             <h2>Viewing: {name}</h2>
 
             {/* flip the flag, if the user is searching button displays appropriately */}
@@ -123,7 +124,7 @@ const App = () => {
     return (
         <div>
             <Routes>
-                <Route path='/maker' element={<DeckMakerView/>}/>
+                <Route path='/deckPage' element={<DeckMakerView/>}/>
 
                 <Route path='/collection/:id' element={<DeckView/>}/>
             </Routes>

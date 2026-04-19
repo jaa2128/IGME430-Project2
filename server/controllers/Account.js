@@ -5,11 +5,14 @@ const loginPage = (req, res) => {
     return res.render('login');
 };
 
+const accountPage = (req, res) => {
+    return res.render('account');
+}
+
 const logout = (req, res) => {
     req.session.destroy();
     return res.redirect('/');
 };
-
 
 const login = (req, res) => {
     const username = `${req.body.username}`;
@@ -26,7 +29,7 @@ const login = (req, res) => {
 
         req.session.account = Account.toAPI(account);
 
-        return res.json({redirect: '/maker'});
+        return res.json({redirect: '/deckPage'});
     })
 };
 
@@ -48,7 +51,7 @@ const signup = async (req, res) => {
         const newAccount = new Account({username, password: hash});
         await newAccount.save();
         req.session.account = Account.toAPI(newAccount);
-        return res.json({redirect: '/maker'});
+        return res.json({redirect: '/deckPage'});
     } catch (err){
         console.log(err);
         if(err.code === 11000){
@@ -94,7 +97,7 @@ const resetForgottenPassword = async (req, res) => {
 }
 
 const changePassword = async (req, res) => {
-    const oldPass = `${req.body.oldpass}`;
+    const oldPass = `${req.body.oldPass}`;
     const pass = `${req.body.pass}`;
     const pass2 = `${req.body.pass2}`;
 
@@ -126,7 +129,7 @@ const changePassword = async (req, res) => {
         account.password = newHash;
         await account.save();
 
-        return res.json({redirect: '/maker'});
+        return res.json({redirect: '/account'});
     })
 
 
@@ -138,5 +141,6 @@ module.exports = {
     logout, 
     signup,
     resetForgottenPassword,
-    changePassword
+    changePassword,
+    accountPage
 };

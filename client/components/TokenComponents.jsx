@@ -59,12 +59,12 @@ const TokenList = (props) => {
                 {/* Delete Token component, when clicked on it performs a delete request
                     While also triggering the triggerReload property which is defined
                     in DeckView in maker.jsx, this updates the reloadTokens property which 
-                    triggers the effect to relaod the Token List */}
-                <div className="deleteToken" 
+                    triggers the effect to reload the Token List */}
+                <button className="deleteToken" 
                 onClick={() => handleDeleteToken(token, props.triggerReload, props.deckID)} 
                 >
                     <span className='deleteIcon'>-</span>
-                </div>
+                </button>
             </div>
         )
     });

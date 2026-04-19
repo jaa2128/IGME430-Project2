@@ -1,5 +1,11 @@
 const models = require('../models');
 const TokenDeck = models.TokenDeck;
+const Token = models.Token;
+
+// function to display deck page to user
+const deckPage = async (req, res) => {
+    return res.render('app');
+};
 
 // Function to make a deck
 const makeDeck = async (req, res) => {
@@ -26,6 +32,46 @@ const makeDeck = async (req, res) => {
             return res.status(400).json({error: 'Deck already exists'});
         }
         return res.status(500).json({error: 'An error occured making deck'});
+    }
+}
+
+// Function to delete a Deck from a user
+const deleteDeck = async (req, res) => {
+    // ensure we have the deck's id to find it for deletion
+    if(!req.body.deckID){
+        return res.status(400).json({error: 'All fields are required!'});
+    }
+
+    // attempt delete
+    try{
+
+        // First find the deck according to the id
+        const deck = await TokenDeck.findOne({
+            _id: req.body.deckID,
+            owner: req.session.account._id
+        });
+
+        // if there is none, return 404
+        if(!deck){
+            return res.status(404).json({error: 'Deck not found'});
+        }
+
+        // Then delete all Token Documents found in this deck
+        // the $in operator matches the _id with those found inside of this deck
+        // also ensure that the tokens deleted belong to this account
+        await Token.deleteMany({
+            _id: { $in: deck.tokens },
+            owner: req.session.account._id
+        });
+
+        // Finally delete this deck and return 200
+        await TokenDeck.deleteOne({_id: req.body.deckID});
+
+        return res.status(200).json({message: 'Deck deleted successfully'});
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(500).json({error: 'An error occurred while deleting the deck'});
     }
 }
 
@@ -71,7 +117,9 @@ const getDeck = async (req, res) => {
 }
 
 module.exports = {
+    deckPage,
     makeDeck,
+    deleteDeck,
     getDecks,
     getDeck,
 }
