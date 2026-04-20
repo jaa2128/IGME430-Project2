@@ -147,7 +147,7 @@ const ForgotPasswordWindow = (props) => {
             className='mainForm'
         >
             <label htmlFor='username'>Username: </label>
-            <input id='oldPass' type="text" name='username' placeholder='username'/>
+            <input id='user' type="text" name='user' placeholder='username'/>
             <label htmlFor="pass">Password: </label>
             <input id='pass' type='password' name='pass' placeholder='new password'/>
             <label htmlFor="pass">Password: </label>
