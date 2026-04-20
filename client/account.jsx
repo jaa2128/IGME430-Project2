@@ -11,7 +11,7 @@ const handlePasswordChange = (e) => {
     e.preventDefault();
     helper.hideError();
 
-    const oldPass = e.target.querySelector('#olfPass').value;
+    const oldPass = e.target.querySelector('#oldPass').value;
     const pass = e.target.querySelector('#pass').value;
     const pass2 = e.target.querySelector('#pass2').value;
 
