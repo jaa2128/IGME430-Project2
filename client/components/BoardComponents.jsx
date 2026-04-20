@@ -12,6 +12,7 @@ const BoardToken = (props) => {
     const onRemove = props.onRemove;
 
     return (
+        // add a class name if the 'isTapped' field of token is true
         <div key={token._id} className={`board-token-container ${token.isTapped ? 'tapped' : ''}`}
         style={{cursor: 'pointer'}}>
             <img 
@@ -19,6 +20,7 @@ const BoardToken = (props) => {
                 onClick={() => onTap(token.instanceID)}
             />
 
+            // section to add card-controls
             <div className="card-controls">
                 <button onClick={() => onRemove(token.instanceID)}
                  className='removeBoardToken'>-</button>

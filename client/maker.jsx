@@ -66,7 +66,7 @@ const handleTapToken = (instanceID, onTokenTapped) => {
 }
 
 const handleRemoveFromBoard = (instanceID, onTokenRemove) => {
-    // return mapped array as React only changes state for when the variable changes
+    // return filtered array as React only changes state for when the variable changes
     // not for changes in internal state
     onTokenRemove((current) => current.filter(token => token.instanceID !== instanceID));
 }
