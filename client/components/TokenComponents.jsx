@@ -4,6 +4,9 @@ const helper = require('../helper.js');
 const React = require('react');
 const {useState, useEffect} = React;
 
+// GenericTokenList helper component
+const {GenericTokenList} = require('./HelperComponents.jsx');
+
 /**
  * Function to handle delete requests to delete a new Token
  * pass in deckID to know which deck to delete a Token from
@@ -26,20 +29,23 @@ const handleDeleteToken = (selectedToken, onTokenDeleted, deckID) => {
  * to delete the token from the deck
  */
 const Token = (props) => {
+    const token = props.token;
+    const onDeleteClick = props.onDeleteClick;
+
     return (
-        <div key={props.token._id} className='token'>
-                <img src={props.token.imageString} alt="card face" className="cardFace" />
+        <div key={token._id} className='token'>
+                <img src={token.imageString} alt="card face" className="cardFace" />
 
                 {/* Delete Token Button, when clicked on it performs a delete request
                     While also triggering the triggerReload property which is defined
                     in DeckView in maker.jsx, this updates the reloadTokens property which 
                     triggers the effect to reload the Token List */}
                 <button className="deleteToken" 
-                onClick={props.onDeleteClick} 
+                onClick={() => onDeleteClick(token)} 
                 >
                     <span className='deleteIcon'>-</span>
                 </button>
-            </div>
+        </div>
     )
 }
 
@@ -52,38 +58,31 @@ const TokenList = (props) => {
     
     const [tokens, setTokens] = useState([]);
 
+    const deckID = props.deckID;
+    const reloadTokens = props.reloadTokens;
+    const triggerReload = props.triggerReload;
+
     // Hook to load tokens from the deck we are viewing
     // when updates are made
      useEffect(() => {
         // grab tokens from the deck we are viewing
         const loadTokensFromDeck = async () => {
-            const response = await fetch(`/getDeck?id=${props.deckID}`);
+            const response = await fetch(`/getDeck?id=${deckID}`);
             const data = await response.json();
             setTokens(data.deck.tokens || []);
         };
         loadTokensFromDeck();
-    }, [props.reloadTokens]);
-
-    // If there are no tokens
-    if(tokens.length === 0){
-        return (
-            <div className='deckList'>
-                <h3 className="emptyToken">No Tokens Yet!</h3>
-            </div>
-        );
-    }
-
-    // if there are tokens create a bunch of nodes to display tokens
-    const tokenNodes = tokens.map(token => {
-        return (
-            <Token token={token} onDeleteClick={() => handleDeleteToken(token, props.triggerReload, props.deckID)}/>
-        )
-    });
+    }, [reloadTokens]);
 
     return (
-        <div className="tokenList">
-            {tokenNodes}
-        </div>
+        <GenericTokenList
+            tokens={tokens}
+            emptyMessage='No Tokens Yet! Search and add Tokens!'
+            Component={Token}
+            extraProps={{
+                onDeleteClick: (token) => handleDeleteToken(token, triggerReload, deckID)
+            }}
+        />
     )
 }
 

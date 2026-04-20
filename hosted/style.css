@@ -294,3 +294,29 @@ h3.tokenName {
     display: flex;
     justify-content: center;
 }
+
+
+.board {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap; 
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 20px;
+    gap: 20px;
+    width: 100%;
+}
+
+.board:first-child{
+    margin: 40px;
+}
+
+.board-token-container {
+    display: inline-block;
+    margin-right: 40px;
+}
+
+.board-token-container.tapped {
+    transform: rotate(90deg);
+    margin-right:  50px; 
+}

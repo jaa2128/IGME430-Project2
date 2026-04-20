@@ -12,6 +12,7 @@ const { BrowserRouter, Routes, Route, Link, useNavigate, useParams} = ReactRoute
 const {DeckForm, DeckList} = require('./components/DeckComponents.jsx');
 const {TokenList} = require('./components/TokenComponents.jsx');
 const {TokenSetSearchForm} = require('./components/TokenSearchComponents.jsx');
+const {BoardDeckList, Board} = require('./components/BoardComponents.jsx');
 
 /**
  * Function to handle post requests to create a new Token
@@ -27,9 +28,49 @@ const handleToken = (selectedToken, onTokenAdded, deckID) => {
     const name = selectedToken.name;
     const imageString = selectedToken.imageString;
 
+    console.log(name, imageString);
+
     helper.sendRequest('POST', '/addToken', {name, imageString, deckID}, onTokenAdded);
     return false;
 }
+
+// Handles what should happen when a token is clicked
+const handlePlaceOnBoard = (token, onTokenPlaced) => {
+    // Create a new client side instance of a Token
+    const newInstance = {
+        // smear token data
+        ...token,
+
+        // generate unique ID based off the current 
+        // taken from https://stackoverflow.com/questions/3231459/how-can-i-create-unique-ids-with-javascript
+        instanceID: 'id' + (new Date()).getTime(), 
+
+        // starts off untapped
+        isTapped: false,
+    }
+
+    // call the callback function, React passes in current state of
+    // array
+    onTokenPlaced((current) => [...current, newInstance]);
+}
+
+// Handle tapping a Token on the board
+const handleTapToken = (instanceID, onTokenTapped) => {
+    // return mapped array as React only changes state for when the variable changes
+    // not for changes in internal state
+    onTokenTapped((current) => current.map (token => 
+        // For each token in the current array, check if the instanceID matches
+        // if it is return that token with isTapped field flipped, if not, return the same token
+        token.instanceID === instanceID ? {...token, isTapped: !token.isTapped} : token
+    ));
+}
+
+const handleRemoveFromBoard = (instanceID, onTokenRemove) => {
+    // return mapped array as React only changes state for when the variable changes
+    // not for changes in internal state
+    onTokenRemove((current) => current.filter(token => token.instanceID !== instanceID));
+}
+
 
 /**
  * Func Component representing a whole 'page' where user can make and view Decks
@@ -91,7 +132,11 @@ const DeckView = () => {
 
     return(
         <div id='selectedDeck'>
-            <Link to='/deckPage'>&lt; Back to Collections</Link>
+            <div className="navLinks">
+                <Link to='/deckPage'>&lt; Back to Collections</Link>
+                <Link to={`/board/${id}`}>Play on Board &gt;</Link>
+            </div>
+            
             <h2>Viewing: {name}</h2>
 
             {/* flip the flag, if the user is searching button displays appropriately */}
@@ -124,7 +169,45 @@ const DeckView = () => {
  * @returns the entire Deck View
  */
 const BoardView = () => {
-    
+    // Grabs Deck Id from the URL (/collection/:id)
+    const {id} = useParams();
+    const [boardTokens, setBoardTokens] = useState([]); // variable to track Tokens on board
+    const [name, setName] = useState(''); // used to set name when playing the deck
+
+    // Fetches the name for the UI
+    useEffect(() => {
+        const fetchName = async () => {
+            const response = await fetch (`/getDeck?id=${id}`);
+            const data = await response.json();
+            setName(data.deck.name);
+        };
+        fetchName();
+    }, [id]);
+
+    return(
+        <div className="boardPage">
+            <Link to={`/collection/${id}`}>&lt; Back to Deck</Link>
+            <h2>Playing: {name}</h2>
+
+            {/* Where Players can play their cards in their deck */}
+            <div className="boardDeck">
+                <BoardDeckList
+                    deckID={id}
+                    onPlace={(token) => handlePlaceOnBoard(token, setBoardTokens)}
+                />
+            </div>
+
+            <div className="boardArea">
+                <Board
+                    boardTokens={boardTokens}
+                    onTap={(instanceID) => handleTapToken(instanceID, setBoardTokens)}
+                    onRemove={(instanceID) => handleRemoveFromBoard(instanceID, setBoardTokens)}
+                />
+            </div>
+        </div>
+    )
+
+
 }
 
 const App = () => {
@@ -134,6 +217,8 @@ const App = () => {
                 <Route path='/deckPage' element={<DeckMakerView/>}/>
 
                 <Route path='/collection/:id' element={<DeckView/>}/>
+
+                <Route path='/board/:id' element={<BoardView/>}/>
             </Routes>
         </div>
     );

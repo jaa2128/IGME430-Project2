@@ -4,6 +4,9 @@ const helper = require('../helper.js');
 const React = require('react');
 const {useState, useEffect} = React;
 
+// GenericTokenList helper component
+const {GenericTokenList} = require('./HelperComponents.jsx');
+
 /**
  * function to handle searches for a Token Set
  * @param {HTMLFormElement} e - the Form this function is called by
@@ -38,16 +41,19 @@ const handleSetSearch = async (e, onResultsFound) => {
  * @returns - A Token in the form of Html Elements
  */
 const SearchResultToken = (props) => {
+    const token = props.token;
+    const onTokenSelect = props.onTokenSelect;
+
     return (
         <div 
-            key={props.token.id}
+            key={token.id}
             className='token'
-            onClick={props.onTokenSelect} // when clicked pass the token to the callback function
+            onClick={() => onTokenSelect(token)} // when clicked pass the token to the callback function
             style={{cursor: 'pointer'}}
         >
             {/* Use the token's image String to display */}
-            <img src={props.token.imageString} alt='card face' className='cardFace'/>
-            <h3 className='tokenName'>{props.token.name}</h3>
+            <img src={token.imageString} alt='card face' className='cardFace'/>
+            <h3 className='tokenName'>{token.name}</h3>
         </div>
     )
 }
@@ -61,25 +67,13 @@ const SearchList = (props) => {
     // Since tokens will be passed in, no need for hook
     const tokens = props.tokens || [];
 
-    if(tokens.length === 0){
-        return (
-            <div className="tokenList">
-                <h3 className="emptyToken"> No Results found.</h3>
-            </div>
-        )
-    }
-
-    const tokenNodes = tokens.map((token) => {
-        return(
-            // On tokenSelect callback is passed in from TokenSetSearchForm
-            <SearchResultToken token={token} onTokenSelect={props.onTokenSelect}/>
-        )
-    });
-
-    return (
-        <div className="tokenList">
-            {tokenNodes}
-        </div>
+    return(
+        <GenericTokenList 
+        tokens={tokens}
+        emptyMessage='No Results Found'
+        Component={SearchResultToken}
+        extraProps={{onTokenSelect: props.onTokenSelect}}
+        />
     )
 }
 

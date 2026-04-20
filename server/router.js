@@ -31,6 +31,7 @@ const router = (app) => {
 
     // handle uncaught routes to /collection, prevents /collection refreshes from sending 404s
     app.get('/collection/{*splat}', mid.requiresLogin, controllers.TokenDeck.deckPage);
+     app.get('/board/{*splat}', mid.requiresLogin, controllers.TokenDeck.deckPage);
 
     // anything else, send to Not Found page
     app.get('/*splat', async (req, res) => {
