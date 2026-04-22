@@ -88,7 +88,7 @@ const TokenSetSearchForm = (props) => {
     return(
         <div className="searchContainer">
             {/* Upon submission set Results to results of Search */}
-            <form onSubmit={(e) => handleSetSearch(e, setResults)}>
+            <form className='searchForm' onSubmit={(e) => handleSetSearch(e, setResults)}>
                 <label htmlFor="setCode"> Set Code: </label>
                 <input type="text" id="setCode" name='setCode'/>
 

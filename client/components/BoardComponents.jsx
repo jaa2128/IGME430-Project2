@@ -20,7 +20,7 @@ const BoardToken = (props) => {
                 onClick={() => onTap(token.instanceID)}
             />
 
-            // section to add card-controls
+            {/* section to add card-controls */}
             <div className="card-controls">
                 <button onClick={() => onRemove(token.instanceID)}
                  className='removeBoardToken'>-</button>

@@ -71,6 +71,15 @@ const handleRemoveFromBoard = (instanceID, onTokenRemove) => {
     onTokenRemove((current) => current.filter(token => token.instanceID !== instanceID));
 }
 
+const AdComponent = (props) => {
+    return (
+        <div className={`ad-placeholder ${props.type}`}>
+            <div className="ad-content">
+                <p>This is an ad</p>
+            </div>
+        </div>
+    )
+}
 
 /**
  * Func Component representing a whole 'page' where user can make and view Decks
@@ -82,26 +91,33 @@ const DeckMakerView = () => {
     const navigate = useNavigate();
 
     return (
-        <div>
-            {/* Deck Form */}
-             <div id="makeDeck">
-                <DeckForm triggerReload={()=> setReloadDecks(!reloadDecks)}/>
-            </div>
+        <div className='viewWrapper'>
+            {/* Left Ad Pillar */}
+            <AdComponent type="ad-left" />
 
-            <div id="appMessage" class='hidden'>
-                <h3><span id="errorMessage"></span></h3>
+            <div className="main-content">
+                {/* Deck Form */}
+                 <div id="makeDeck">
+                    <DeckForm triggerReload={()=> setReloadDecks(!reloadDecks)}/>
+                </div>
+        
+                {/* List of Decks */}
+                <div className="tokens">
+                    <h2>Your Decks:</h2>
+                        
+                    {/* When a Deck in the DeckList is clicked on, navigate to that deck's view */}
+                    <DeckList reloadDecks={reloadDecks}
+                    onSelect={(deck) => {
+                        helper.hideError();
+                        navigate(`/collection/${deck._id}`)}
+                    } 
+                    triggerReload={()=> setReloadDecks(!reloadDecks)}
+                    />
+                </div>
             </div>
-
-            {/* List of Decks */}
-            <div className="tokens">
-                <h2>Your Decks:</h2>
-                    
-                {/* When a Deck in the DeckList is clicked on, navigate to that deck's view */}
-                <DeckList reloadDecks={reloadDecks}
-                onSelect={(deck) => navigate(`/collection/${deck._id}`)} 
-                triggerReload={()=> setReloadDecks(!reloadDecks)}
-                />
-            </div>
+            
+             {/* Left Ad Pillar */}
+            <AdComponent type="ad-right" />
         </div>
     );
 }
@@ -131,36 +147,48 @@ const DeckView = () => {
     }, [id]);
 
     return(
-        <div id='selectedDeck'>
-            <div className="navLinks">
-                <Link to='/deckPage'>&lt; Back to Collections</Link>
-                <Link to={`/board/${id}`}>Play on Board &gt;</Link>
-            </div>
-            
-            <h2>Viewing: {name}</h2>
+        <div className="viewWrapper">
+            {/* Left Ad Pillar */}
+            <AdComponent type="ad-left" />
 
-            {/* flip the flag, if the user is searching button displays appropriately */}
-            <button className="makeTokenSubmit" onClick={() => setIsSearching(!isSearching)}>
-                {isSearching ? 'Cancel Search' : '+ Find New Cards for Deck'}
-            </button>
-
-            {isSearching && (
-                <div className="searchArea">
-                        {/* Complete onTokenSelect Chain by defining the Form's onTokenSelect 
-                            callback function */}
-                        <TokenSetSearchForm onTokenSelect={(selectedToken) => {
-                            handleToken(selectedToken, () => {
-                                setReloadDeck(!reloadDeck);
-                            }, id);
-                        }}/>
+            <div className='main-content'>
+                <div className="navLinks">
+                    <Link to='/deckPage' onClick={() => helper.hideError()}>&lt; Back to Collections</Link>
+                    <Link to={`/board/${id}`}  onClick={() => helper.hideError()}>Play on Board &gt;</Link>
                 </div>
-            )}
+                <h2>Viewing: {name}</h2>
 
-            {/* Always show Tokens in User's deck */}
-            <div className="tokens">
-                <TokenList reloadTokens={reloadDeck} deckID={id} triggerReload={() => setReloadDeck(!reloadDeck)}/>
+                {/* flip the flag, if the user is searching button displays appropriately */}
+                <button className="makeTokenSubmit" onClick={() => {
+                    helper.hideError();
+                    setIsSearching(!isSearching)}}>
+                    {isSearching ? 'Cancel Search' : '+ Find New Cards for Deck'}
+                </button>
+
+                {isSearching && (
+                    <div className="searchArea">
+                            {/* Complete onTokenSelect Chain by defining the Form's onTokenSelect 
+                                callback function */}
+                            <TokenSetSearchForm onTokenSelect={(selectedToken) => {
+                                handleToken(selectedToken, () => {
+                                    setReloadDeck(!reloadDeck);
+                                }, id);
+                            }}/>
+                    </div>
+                )}
+
+
+
+                {/* Always show Tokens in User's deck */}
+                <div className="tokens">
+                    <TokenList reloadTokens={reloadDeck} deckID={id} triggerReload={() => setReloadDeck(!reloadDeck)}/>
+                </div>
             </div>
+
+            {/* Left Ad Pillar */}
+            <AdComponent type="ad-right" />
         </div>
+        
     )
 }
 
@@ -185,26 +213,34 @@ const BoardView = () => {
     }, [id]);
 
     return(
-        <div className="boardPage">
-            <Link to={`/collection/${id}`}>&lt; Back to Deck</Link>
-            <h2>Playing: {name}</h2>
+        <div className="viewWrapper">
 
-            {/* Where Players can play their cards in their deck */}
-            <div className="boardDeck">
-                <BoardDeckList
-                    deckID={id}
-                    onPlace={(token) => handlePlaceOnBoard(token, setBoardTokens)}
-                />
-            </div>
+            <div className="main-content">
 
-            <div className="boardArea">
-                <Board
-                    boardTokens={boardTokens}
-                    onTap={(instanceID) => handleTapToken(instanceID, setBoardTokens)}
-                    onRemove={(instanceID) => handleRemoveFromBoard(instanceID, setBoardTokens)}
-                />
+                <Link to={`/collection/${id}`}>&lt; Back to Deck</Link>
+
+                 {/* Left Ad Pillar */}
+                <AdComponent type="banner" />
+                <h2>Playing: {name}</h2>
+                    {/* Where Players can play their cards in their deck */}
+                <div className="boardDeck">
+                    <BoardDeckList
+                        deckID={id}
+                        onPlace={(token) => handlePlaceOnBoard(token, setBoardTokens)}
+                    />
+                </div>
+
+                <div className="boardArea">
+                    <Board
+                        boardTokens={boardTokens}
+                        onTap={(instanceID) => handleTapToken(instanceID, setBoardTokens)}
+                        onRemove={(instanceID) => handleRemoveFromBoard(instanceID, setBoardTokens)}
+                    />
+                </div>
+
             </div>
         </div>
+
     )
 
 
@@ -220,6 +256,8 @@ const App = () => {
 
                 <Route path='/board/:id' element={<BoardView/>}/>
             </Routes>
+
+
         </div>
     );
 };
