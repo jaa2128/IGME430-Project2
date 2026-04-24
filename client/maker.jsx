@@ -95,14 +95,12 @@ const DeckMakerView = () => {
             {/* Left Ad Pillar */}
             <AdComponent type="ad-left" />
 
-            <div className="main-content">
+            <div className="mainContent">
                 {/* Deck Form */}
-                 <div id="makeDeck">
-                    <DeckForm triggerReload={()=> setReloadDecks(!reloadDecks)}/>
-                </div>
+                <DeckForm triggerReload={()=> setReloadDecks(!reloadDecks)}/>
         
                 {/* List of Decks */}
-                <div className="tokens">
+                <div className="decks">
                     <h2>Your Decks:</h2>
                         
                     {/* When a Deck in the DeckList is clicked on, navigate to that deck's view */}
@@ -133,8 +131,8 @@ const DeckView = () => {
     const [reloadDeck, setReloadDeck] = useState(false); // flag to reload Deck from server
     const [name, setName] = useState(''); // used to set name when viewing the deck
 
-    // flag to determine whether or not User is searching for Tokens to add to deck
-    const[isSearching, setIsSearching] = useState(false);
+    // flag to determine whether are seeing the search results are visible
+    const[showResults, setShowResults] = useState(false);
 
     // Fetches the name for the UI
     useEffect(() => {
@@ -151,34 +149,35 @@ const DeckView = () => {
             {/* Left Ad Pillar */}
             <AdComponent type="ad-left" />
 
-            <div className='main-content'>
+            <div className='mainContent'>
                 <div className="navLinks">
-                    <Link to='/deckPage' onClick={() => helper.hideError()}>&lt; Back to Collections</Link>
-                    <Link to={`/board/${id}`}  onClick={() => helper.hideError()}>Play on Board &gt;</Link>
+                    <Link className='reactLink' id='backToDecks' to='/deckPage' onClick={() => helper.hideError()}>&lt; Back to Decks</Link>
+                    
+                    <h2>Viewing: {name}</h2>
+
+                    <Link className='reactLink' id='toBoard' to={`/board/${id}`}  onClick={() => helper.hideError()}>Play on Board &gt;</Link>
                 </div>
-                <h2>Viewing: {name}</h2>
 
-                {/* flip the flag, if the user is searching button displays appropriately */}
-                <button className="makeTokenSubmit" onClick={() => {
-                    helper.hideError();
-                    setIsSearching(!isSearching)}}>
-                    {isSearching ? 'Cancel Search' : '+ Find New Cards for Deck'}
-                </button>
+                <div id="appMessage" class='hidden'>
+                    <h3><span id="errorMessage"></span></h3>
+                </div>
 
-                {isSearching && (
-                    <div className="searchArea">
-                            {/* Complete onTokenSelect Chain by defining the Form's onTokenSelect 
-                                callback function */}
-                            <TokenSetSearchForm onTokenSelect={(selectedToken) => {
-                                handleToken(selectedToken, () => {
-                                    setReloadDeck(!reloadDeck);
-                                }, id);
-                            }}/>
-                    </div>
-                )}
+                <div className="searchArea">
+                        <TokenSetSearchForm 
+                        // Pass down params to show search results upon submitting 
+                        showResults={showResults}
+                        onSearchStarted={() => setShowResults(true)} 
+                        setShowResults={setShowResults}
 
-
-
+                         // Complete onTokenSelect Chain by defining the Form's onTokenSelect 
+                         // callback function 
+                        onTokenSelect={(selectedToken) => {
+                            handleToken(selectedToken, () => {
+                                setReloadDeck(!reloadDeck);
+                            }, id);
+                        }}/>
+                        
+                </div>
                 {/* Always show Tokens in User's deck */}
                 <div className="tokens">
                     <TokenList reloadTokens={reloadDeck} deckID={id} triggerReload={() => setReloadDeck(!reloadDeck)}/>
@@ -215,9 +214,11 @@ const BoardView = () => {
     return(
         <div className="viewWrapper">
 
-            <div className="main-content">
+            <div className="mainContent">
 
-                <Link to={`/collection/${id}`}>&lt; Back to Deck</Link>
+                <div className="navLinks">
+                    <Link className='reactLink' to={`/collection/${id}`}>&lt; Back to Deck</Link>
+                </div>
 
                  {/* Left Ad Pillar */}
                 <AdComponent type="banner" />

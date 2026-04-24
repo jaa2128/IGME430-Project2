@@ -11,7 +11,7 @@ const GenericTokenList = (props) => {
     // If there are no tokens
     if(tokens.length === 0){
         return (
-                <h3 className="emptyToken">{emptyMessage}</h3>
+                <h3 className="emptyList">{emptyMessage}</h3>
         );
     }
 
@@ -24,8 +24,8 @@ const GenericTokenList = (props) => {
     });
 
     return (
-        // If there is no className, use tokenList by default
-        <div className={listClassName || 'tokenList'}>
+        // If there is no className, use componentList by default
+        <div className={listClassName || 'componentList'}>
             {tokenNodes}
         </div>
     )

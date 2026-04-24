@@ -39,15 +39,22 @@ const handleDeleteDeck = (deckID, onDeckDeleted) => {
  */
 const DeckForm = (props) => {
     return (
-        <form onSubmit={(e) => handleDeck(e, props.triggerReload)}
-        name='deckForm'
-        action='/makeDeck'
-        method='POST'
-        className='tokenForm'>
-            <label htmlFor='deckName'>New Deck: </label>
-            <input type="text" id="deckName" placeholder='Deck Name' name='deckName'/>
-            <input type="submit" className="makeTokenSubmit" value='Create Deck'/>
-        </form>
+        <div className="makeDeck">
+            <form onSubmit={(e) => handleDeck(e, props.triggerReload)}
+                name='deckForm'
+                action='/makeDeck'
+                method='POST'
+                className='deckForm'>
+                <label htmlFor='deckName'>New Deck: </label>
+                <input type="text" id="deckName" placeholder='Deck Name' name='deckName'/>
+                <input type="submit" className="makeDeckSubmit" value='Create Deck'/>
+                
+            </form>   
+            <div id="appMessage" class='hidden'>
+                    <h3><span id="errorMessage"></span></h3>
+                </div>        
+        </div>
+
     )
 }
 
@@ -108,8 +115,8 @@ const DeckList = (props) => {
     // If there are no Decks
     if(decks.length === 0){
         return (
-            <div className="tokenList">
-                <h3 className="emptyToken">No Decks</h3>
+            <div className="componentList">
+                <h3 className="emptyList">No Decks</h3>
             </div>
         );
     }
@@ -121,12 +128,12 @@ const DeckList = (props) => {
             // When any of these Nodes are clicked call the onSelect callbackfunction
             // defined in DeckMakerView in maker.jsx
            <div key={deck._id}
-           className='token'
+           className='deck'
            onClick={() => props.onSelect(deck)} 
            style={{cursor: 'pointer'}}
            >
             <img src='/assets/img/cards.png' alt='card face' className='cardface'/>
-            <h3 className="tokenName">Deck: {deck.name}</h3>
+            <h3 className="deckName">Deck: {deck.name}</h3>
             <h3 className="tokenAge">Number of Tokens: {deck.tokens.length}</h3>
 
             <button className="deleteDeck" 
@@ -144,7 +151,7 @@ const DeckList = (props) => {
     });
 
     return (
-        <div className="tokenList">
+        <div className="componentList">
             {deckNodes}
 
             <DeleteConfirmDialog 

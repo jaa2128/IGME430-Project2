@@ -9,9 +9,13 @@ html, body {
 #logo {
     height: 40px;
     width: 40px;
-    padding-top: 5px;
-    float:left;
     border-radius: 8px;
+}
+
+a:has(> #logo){
+    margin-right: auto; 
+    display: flex;
+    align-items: center;
 }
 
 nav {
@@ -20,17 +24,18 @@ nav {
     background-color: #55acee;
 }
 
-nav:nth-child(1) {
-    padding-left: 25px;
+.navInner {
+    grid-column: 3;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    height: 100%;
+    width: 1040;
 }
 
 .navlink {
-    padding: 5px;
-    padding-top: 12px;
-    padding-left: 20px;
     color: white;
     font-size: 1.3em;
-    float: left;
 }
 
 .navlink a, .navlink a:link, .navlink a:visited, .navlink a:hover, .navlink a:active {
@@ -47,17 +52,53 @@ nav:nth-child(1) {
     background-color: #66bdff;
 }
 
-.tokenForm {
-    border: 2px solid #338acc;
-    height: 35px;
+/* ---- App views ------------------------------------------------------------- */
+
+.navLinks {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     width: 1040px;
-    padding-top:10px;
-    background-color: #55acee;
-    border-bottom-right-radius: 4px;
-    border-top-right-radius: 4px;
 }
 
-.tokenForm label {
+#backToDecks{
+    grid-column: 1;
+
+}
+
+#toBoard{
+    grid-column: 3;
+    justify-self: end;
+}
+
+h2 {
+    text-align: center;
+}
+
+.navLinks .reactLink{
+    display: inline-block;
+    background-color: #55acee;
+    color:white;
+    text-decoration: none;
+    border-radius: 4px;
+    border: 1px solid #338acc;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    width: fit-content;
+    height: fit-content;
+    padding: 5px;
+}
+
+#app {
+    margin-top: 10px;
+}
+
+.deckForm{
+    grid-column: 1;
+    margin: 0;
+}
+
+.deckForm label{
     display: inline-block;
     padding-right: 10px;
     width: fit-content;
@@ -66,11 +107,11 @@ nav:nth-child(1) {
     color: white;
 }
 
-.tokenForm input[type=text] {
+.deckForm input[type=text]{
     display: inline-block;
 }
 
-.makeTokenSubmit {
+.makeDeckSubmit {
     transition: background-color 0.4s ease;
     display: inline;
     width: fit-content;
@@ -80,23 +121,24 @@ nav:nth-child(1) {
     text-decoration: none;
 }
 
-.makeTokenSubmit:link, .makeTokenSubmit:visited, .makeTokenSubmit:hover, .makeTokenSubmit:active {
+.makeDeckSubmit:link, .makeDeckSubmit:visited, .makeDeckSubmit:hover, .makeDeckSubmit:active {
     color: white;
 }
 
-.makeTokenSubmit:hover {
+.makeDeckSubmit:hover {
     transition: background-color 0.4s ease;
     background-color: #338acc;
 }
 
-.tokens, .boardDeck {
+.decks, .tokens, .boardDeck {
     width: 100%;
-    max-width: 1200px;
+    max-width: 1040;
     border: 2px solid #55acee;
     border-radius: 4px;
     overflow: hidden;
 }
 
+/* ----- Login / Sign up ------------------------------------------------------ */
 .mainForm {
     height: 300px;
     width: 350px;
@@ -158,13 +200,31 @@ nav:nth-child(1) {
     display: none;
 }
 
+.makeDeck{
+    display: grid;
+    grid-template-columns: 1.25fr 2fr;
+    width: 1040px;
+    border: 2px solid #338acc;
+    height: 50px;
+    max-height: 50px;
+    background-color: #55acee;
+    border-bottom-right-radius: 4px;
+    border-top-right-radius: 4px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
 #appMessage {
-    top: 250px;
     width: fit-content;
-    margin: auto;
     z-index: 200;
     right: 0px;
     overflow: hidden;
+    text-align: center;
+}
+
+.makeDeck #appMessage{
+    grid-column: 2;
+    justify-self: left;
 }
 
 #appMessage h3 {
@@ -180,7 +240,7 @@ nav:nth-child(1) {
 }
 
 
-.token{
+.token, .deck, .resultToken{
     align-items: center;
     justify-content: space-between;
     flex-shrink: 0;
@@ -195,11 +255,11 @@ nav:nth-child(1) {
     position: relative;
 }
 
-.token:first-child{
+.token:first-child, .deck:first-child, .resultToken:first-child{
     margin-left: 5px;
 }
 
-.token:last-child{
+.token:last-child, .deck:last-child, .resultToken:last-child{
     margin-right: 5px;
 }
 
@@ -226,7 +286,7 @@ nav:nth-child(1) {
     text-align: center;
 }
 
-.token:hover .deleteToken, .token:hover .deleteDeck{
+.token:hover .deleteToken, .deck:hover .deleteDeck{
     display: flex;
 }
 
@@ -235,7 +295,7 @@ nav:nth-child(1) {
     justify-content: center;
 }
 
-.token:hover {
+.token:hover, .deck:hover{
     transition: border-color 0.2s ease-out;
     border-color: rgba(255,255,255, 0.8);
     transition: background-color 2.6s ease-out;
@@ -251,7 +311,7 @@ img.cardFace {
     flex: 0;
 }
 
-h3.emptyToken {
+h3.emptyList {
     width: 400px;
     font-size: 1.5em;
     margin: 0 auto;
@@ -263,7 +323,7 @@ h3.tokenName{
     flex: 1;
 }
 
-h3.tokenName {
+h3.tokenName, h3.deckName{
     text-align: center;
     font-weight: bold;
     padding-left: 65px;
@@ -271,7 +331,7 @@ h3.tokenName {
     width: 200px;
 }
 
-.tokenList{
+.componentList{
     display: flex;
     flex-wrap: nowrap;
     gap: 10px;
@@ -300,12 +360,12 @@ h3.tokenName {
     margin: 40px;
 }
 
-.board-token-container {
+.boardToken {
     display: inline-block;
     margin-right: 40px;
 }
 
-.board-token-container.tapped {
+.boardToken.tapped {
     transform: rotate(90deg);
     margin-right:  50px; 
 }
@@ -317,24 +377,16 @@ h3.tokenName {
     width: 100%;
 }
 
-/* The middle section for your Decks and Forms */
-.main-content {
-    /* Ensures your decks and forms stay in the middle column */
+
+.mainContent {
+
     grid-column: 3; 
-    
-    /* Centering the content inside the middle lane */
     display: flex;
     flex-direction: column;
     align-items: center;
 
 
     width: 100%;
-}
-
-/* Optional: If you want the center content to have a max-width */
-.main-content-inner {
-    width: 100%;
-    max-width: 800px;
 }
 
 .ad-placeholder {
@@ -346,7 +398,7 @@ h3.tokenName {
     color: #888;
     text-align: center;
     font-family: sans-serif;
-    margin: 10px auto;
+    width: 160;
 }
 
 .ad-placeholder.banner {
@@ -370,17 +422,30 @@ h3.tokenName {
     display: block;
 }
 
+.searchArea{
+    border: 2px solid #338acc;
+    border-radius: 4px;
+    width: min-content;
+    margin-bottom: 10px;
+}
+
 .searchResults{
     max-width: 1200px;
 }
 
 .searchForm {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.searchForm label{
+    width: max-content;
 }
 
 .searchContainer{
     width: fit-content;
+    padding: 0 10px
 }
 
 .boardArea {

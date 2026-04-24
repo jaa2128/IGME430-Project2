@@ -13,7 +13,7 @@ const BoardToken = (props) => {
 
     return (
         // add a class name if the 'isTapped' field of token is true
-        <div key={token._id} className={`board-token-container ${token.isTapped ? 'tapped' : ''}`}
+        <div key={token._id} className={`boardToken ${token.isTapped ? 'tapped' : ''}`}
         style={{cursor: 'pointer'}}>
             <img 
                 src={token.imageString} alt="card face" className="cardFace" 
