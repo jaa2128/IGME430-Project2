@@ -96,16 +96,23 @@ const LoginWindow = (props) => {
                 <input id='user' type="text" name='username' placeholder='username'/>
                 <label htmlFor="pass">Password: </label>
                 <input id='pass' type='password' name='pass' placeholder='password'/>
+
+
+                <a id="resetPasswordButton" 
+                    onClick={(e) => {
+                        e.preventDefault();
+                        props.showForgotScreen();
+                    }}
+                    href=''
+                >Forgot Password?</a>
+
                 <input className='formSubmit' type="submit" value="Sign in" />
             </form>
 
-            <a id="resetPasswordButton" 
-                onClick={(e) => {
-                    e.preventDefault();
-                    props.showForgotScreen();
-                }}
-                href=''
-            >Forgot Password?</a>
+            <div id="appMessage" class='hidden'>
+                <h3><span id="errorMessage"></span></h3>
+            </div>
+
         </div>
         
         
@@ -133,6 +140,10 @@ const SignupWindow = (props) => {
             <label htmlFor="pass">Password: </label>
             <input id='pass2' type='password' name='pass2' placeholder='retype password'/>
             <input className='formSubmit' type="submit" value="Sign up" />
+
+            <div id="appMessage" class='hidden'>
+                <h3><span id="errorMessage"></span></h3>
+            </div>
         </form>
     );
 }
@@ -153,6 +164,10 @@ const ForgotPasswordWindow = (props) => {
             <label htmlFor="pass">Password: </label>
             <input id='pass2' type='password' name='pass2' placeholder='retype new password'/>
             <input className='formSubmit' type="submit" value="Reset Password" />
+
+            <div id="appMessage" class='hidden'>
+                <h3><span id="errorMessage"></span></h3>
+            </div>
         </form>
     );
 }

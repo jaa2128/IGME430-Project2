@@ -134,7 +134,7 @@ const DeckList = (props) => {
            >
             <img src='/assets/img/cards.png' alt='card face' className='cardface'/>
             <h3 className="deckName">Deck: {deck.name}</h3>
-            <h3 className="tokenAge">Number of Tokens: {deck.tokens.length}</h3>
+            <h3 className="tokenNum">Number of Tokens: {deck.tokens.length}</h3>
 
             <button className="deleteDeck" 
                 onClick={(e) => {

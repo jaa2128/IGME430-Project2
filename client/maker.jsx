@@ -212,35 +212,38 @@ const BoardView = () => {
     }, [id]);
 
     return(
-        <div className="viewWrapper">
+        <>
+            <div className="viewWrapper">
+                <div className="mainContent">
 
-            <div className="mainContent">
-
-                <div className="navLinks">
-                    <Link className='reactLink' to={`/collection/${id}`}>&lt; Back to Deck</Link>
+                    <div className="navLinks">
+                        <Link className='reactLink' to={`/collection/${id}`}>&lt; Back to Deck</Link>
+                    </div>
+        
+                     {/* Left Ad Pillar */}
+                    <AdComponent type="banner" />
+                    <h2>Playing: {name}</h2>
+                        {/* Where Players can play their cards in their deck */}
+                    <div className="boardDeck">
+                        <BoardDeckList
+                            deckID={id}
+                            onPlace={(token) => handlePlaceOnBoard(token, setBoardTokens)}
+                        />
+                    </div>
+        
                 </div>
-
-                 {/* Left Ad Pillar */}
-                <AdComponent type="banner" />
-                <h2>Playing: {name}</h2>
-                    {/* Where Players can play their cards in their deck */}
-                <div className="boardDeck">
-                    <BoardDeckList
-                        deckID={id}
-                        onPlace={(token) => handlePlaceOnBoard(token, setBoardTokens)}
-                    />
-                </div>
-
-                <div className="boardArea">
-                    <Board
-                        boardTokens={boardTokens}
-                        onTap={(instanceID) => handleTapToken(instanceID, setBoardTokens)}
-                        onRemove={(instanceID) => handleRemoveFromBoard(instanceID, setBoardTokens)}
-                    />
-                </div>
-
             </div>
-        </div>
+            
+
+            <div className="boardArea">
+                <Board
+                    boardTokens={boardTokens}
+                    onTap={(instanceID) => handleTapToken(instanceID, setBoardTokens)}
+                    onRemove={(instanceID) => handleRemoveFromBoard(instanceID, setBoardTokens)}
+                />
+            </div>
+        </>
+           
 
     )
 
@@ -250,15 +253,13 @@ const BoardView = () => {
 const App = () => {
     return (
         <div>
-            <Routes>
-                <Route path='/deckPage' element={<DeckMakerView/>}/>
+                <Routes>
+                   <Route path='/deckPage' element={<DeckMakerView/>}/>
 
-                <Route path='/collection/:id' element={<DeckView/>}/>
+                   <Route path='/collection/:id' element={<DeckView/>}/>
 
-                <Route path='/board/:id' element={<BoardView/>}/>
-            </Routes>
-
-
+                   <Route path='/board/:id' element={<BoardView/>}/>
+                </Routes>
         </div>
     );
 };
