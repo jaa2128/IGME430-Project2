@@ -112,7 +112,7 @@ const TokenSetSearchForm = (props) => {
                 <label htmlFor="setName"> Set Name: </label>
                 <input type="text" id="setName" name='setName' placeholder='e.g. Modern Horizons 3 Commander'/>
 
-                <input type="submit" value="Search for Set" />
+                <input type="submit" value="Search for Set" id='searchSetSubmit'/>
             </form>
 
             {/* Display the results from the search if a request

@@ -18,7 +18,21 @@ const addToken = async (req, res) => {
     };
 
     try{
+        // Check if Token already exists in this user's Deck
+        const doc = await TokenDeck.findOne(
+            {_id: req.body.deckID, owner: req.session.account._id})
+            .populate('tokens').lean().exec();
+
+        // build the new token
         const newToken = new Token(tokenData);
+
+        // if the Deck already has a token of the same name don't add the token
+        // return error message
+        if(doc.tokens.some( token => token.name === newToken.name)){
+            return res.status(400).json({error: 'Token with same name already exists, please select a different token'});
+        }
+
+        // if there isn't save the new Token
         const savedToken = await newToken.save();
 
         // Push token's ID into it's respective Deck array

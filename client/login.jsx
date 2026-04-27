@@ -178,11 +178,12 @@ const init = () => {
 
     const root = createRoot(document.getElementById('content'));
 
+    // small function for Login Window to use to render the ForgotPassword Form
     const showForgotScreen = () => root.render(<ForgotPasswordWindow/>);
 
     loginButton.addEventListener('click', (e) => {
         e.preventDefault();
-        root.render(<LoginWindow />);
+        root.render(<LoginWindow showForgotScreen={showForgotScreen}/>);
         return false;
     });
 
