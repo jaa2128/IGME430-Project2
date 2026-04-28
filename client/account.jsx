@@ -46,6 +46,10 @@ const ChangePasswordWindow = (props) => {
             <label htmlFor="pass">Password: </label>
             <input id='pass2' type='password' name='pass2' placeholder='retype new password'/>
             <input className='formSubmit' type="submit" value="Reset Password" />
+
+            <div id="appMessage" class='hidden'>
+                <h3><span id="errorMessage"></span></h3>
+            </div>
         </form>
     );
 }

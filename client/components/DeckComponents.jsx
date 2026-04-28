@@ -74,13 +74,20 @@ const DeleteConfirmDialog = (props) => {
     */
     <Dialog open={props.isOpen} onClose={props.onClose}>
         <div className="dialogueWrapper">
-            <DialogPanel>
-                <DialogTitle>Delete Deck?</DialogTitle>
-                <Description>This will permanently delete your Deck</Description>
-                <p>Are you sure you want to delete your deck? All Tokens in this deck will be lost.</p>
+            <DialogPanel className="dialoguePanel">
+                <DialogTitle className="dialogueTitle">Delete Deck?</DialogTitle>
 
-                <button onClick={props.onClose}>Cancel</button>
-                <button onClick={props.onConfirm}>Delete Deck</button>
+                <div className="dialogueContent">
+                    <Description><strong>This will permanently delete your Deck</strong></Description>
+                    <p>Are you sure you want to delete your deck? All Tokens in this deck will be lost.</p>
+                </div>
+                
+
+                <div className="dialogueButtons">
+                    <button className="btnCancel" onClick={props.onClose}>Cancel</button>
+                    <button className="btnDelete" onClick={props.onConfirm}>Delete Deck</button>
+                </div>
+
             </DialogPanel>
         </div>
       
@@ -116,7 +123,7 @@ const DeckList = (props) => {
     if(decks.length === 0){
         return (
             <div className="componentList">
-                <h3 className="emptyList">No Decks</h3>
+                <h3 className="emptyList">No Decks, Create a New Deck using the form above!</h3>
             </div>
         );
     }
@@ -139,6 +146,7 @@ const DeckList = (props) => {
             <button className="deleteDeck" 
                 onClick={(e) => {
                     e.stopPropagation(); // prevents onClick from triggering
+                    helper.hideError();
                     setDeckToDelete(deck._id); 
                 }} 
                 >
