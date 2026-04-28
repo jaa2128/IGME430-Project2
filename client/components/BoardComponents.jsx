@@ -5,7 +5,11 @@ const {useState, useEffect} = React;
 // GenericTokenList helper component
 const {GenericTokenList} = require('./HelperComponents.jsx');
 
-// Token that is on the board
+/**
+ * Component meant to represent A Token being played on a Board
+ * @param {object} props - This components properties
+ * @returns - A Board token in the form of html elements
+ */
 const BoardToken = (props) => {
     const token = props.token;
     const onTap = props.onTap;
@@ -23,13 +27,17 @@ const BoardToken = (props) => {
             {/* section to add card-controls */}
             <div className="card-controls">
                 <button onClick={() => onRemove(token.instanceID)}
-                 className='removeBoardToken'>-</button>
+                 className='removeBoardToken'><span className='deleteIcon'>-</span></button>
             </div>
         </div>
     )
 }
 
-// Token that is in the deck
+/**
+ * Component meant to represent A Token being in a Deck
+ * @param {object} props - This components properties
+ * @returns - A Token in the form of html elements
+ */
 const DeckToken = (props) => {
     const token = props.token;
     const onPlace = props.onPlace;
@@ -45,9 +53,14 @@ const DeckToken = (props) => {
     )
 }
 
-// List of Tokens a user can play on this board
-// Similar to TokenList in TokenComponents.jsx but displays 
-// DeckToken components instead of Token Components
+
+/**
+ * List of Tokens a user can play on this board
+ * Similar to TokenList in TokenComponents.jsx but displays 
+ * DeckToken components instead of Token Components
+ * @param {object} props - This components properties
+ * @returns - A List of this deck's Token html elements
+ */
 const BoardDeckList = (props) => {
 
     const [tokens, setTokens] = useState([]);
@@ -79,7 +92,11 @@ const BoardDeckList = (props) => {
     )
 }
 
-// The actual Board where BoardTokens will appear and be interacted with
+/**
+ * The actual Board where BoardTokens will appear and be interacted with
+ * @param {object} props - This components properties
+ * @returns - A List of this deck's Token html elements
+ */
 const Board = (props) => {
     const boardTokens = props.boardTokens || [];
     const onTap = props.onTap;

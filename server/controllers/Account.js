@@ -1,19 +1,48 @@
 const models = require('../models');
 const Account = models.Account;
 
+/**
+ * Renders the login page
+ * @param {Request} req - request object
+ * @param {Response} res - response object
+ * @returns - JSON response Object
+ */
 const loginPage = (req, res) => {
     return res.render('login');
 };
 
-const accountPage = (req, res) => {
+
+/**
+ * Renders the Change Password page
+ * @param {Request} req - request object
+ * @param {Response} res - response object
+ * @returns - JSON response Object
+ */
+const changePasswordPage = (req, res) => {
     return res.render('account');
 }
 
+
+/**
+ * Logs a logged in User out
+ * @param {Request} req - request object
+ * @param {Response} res - response object
+ * @returns - JSON response Object
+ */
 const logout = (req, res) => {
     req.session.destroy();
     return res.redirect('/');
 };
 
+
+/**
+ * authenticates a user based on username and password
+ * attaches a user to a session then redirects them to the 
+ * deck maker page
+ * @param {Request} req - request object
+ * @param {Response} res - response object
+ * @returns 
+ */
 const login = (req, res) => {
     const username = `${req.body.username}`;
     const pass = `${req.body.pass}`;
@@ -33,6 +62,14 @@ const login = (req, res) => {
     })
 };
 
+
+/**
+ * Handles new user creation
+ * hashes the password, then saves new account to MongoDB
+ * @param {Request} req - request object
+ * @param {Response} res - response object
+ * @returns - JSON response Object
+ */
 const signup = async (req, res) => {
     const username = `${req.body.username}`;
     const pass = `${req.body.pass}`;
@@ -61,6 +98,13 @@ const signup = async (req, res) => {
     }
 };
 
+
+/**
+ * Reset's a user's password if they know their username
+ * @param {Request} req - request object
+ * @param {Response} res - response object
+ * @returns - JSON response Object
+ */
 const resetForgottenPassword = async (req, res) => {
 
     // ensure request body has all proper fields similar to signup
@@ -96,6 +140,14 @@ const resetForgottenPassword = async (req, res) => {
     }
 }
 
+
+/**
+ * Updates a password for a logged in user
+ * requires the original password to change it
+ * @param {Request} req - request object
+ * @param {Response} res - response object
+ * @returns - JSON response Object
+ */
 const changePassword = async (req, res) => {
     const oldPass = `${req.body.oldPass}`;
     const pass = `${req.body.pass}`;
@@ -129,7 +181,7 @@ const changePassword = async (req, res) => {
         account.password = newHash;
         await account.save();
 
-        return res.json({redirect: '/account'});
+        return res.json({redirect: '/changePasswordPage'});
     })
 
 
@@ -142,5 +194,5 @@ module.exports = {
     signup,
     resetForgottenPassword,
     changePassword,
-    accountPage
+    changePasswordPage: changePasswordPage
 };

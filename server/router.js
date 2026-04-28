@@ -20,7 +20,7 @@ const router = (app) => {
     app.get('/logout', mid.requiresLogin, controllers.Account.logout);
     app.post('/changePassword', mid.requiresLogin, controllers.Account.changePassword);
     app.post('/resetForgottenPassword', mid.requiresSecure, mid.requiresLogout, controllers.Account.resetForgottenPassword);
-    app.get('/account', mid.requiresLogin, controllers.Account.accountPage);
+    app.get('/changePasswordPage', mid.requiresLogin, controllers.Account.changePasswordPage);
 
     // --- SCRYFALL PROXY ROUTES -------------------------------------------------------------
     app.get('/getTokensFromSet', controllers.ScryfallProxy.getTokensfromSet);

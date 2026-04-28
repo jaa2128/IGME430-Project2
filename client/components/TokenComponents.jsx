@@ -56,11 +56,12 @@ const Token = (props) => {
  */
 const TokenList = (props) => {
     
+    // state used to update tokens in this list
     const [tokens, setTokens] = useState([]);
 
-    const deckID = props.deckID;
-    const reloadTokens = props.reloadTokens;
-    const triggerReload = props.triggerReload;
+    const deckID = props.deckID; // the Deck who this Token List belongs to
+    const reloadTokens = props.reloadTokens; // flag to reload the tokens in this deck 
+    const triggerReload = props.triggerReload; // flag to trigger reloads
 
     // Hook to load tokens from the deck we are viewing
     // when updates are made
@@ -80,7 +81,8 @@ const TokenList = (props) => {
             emptyMessage='No Tokens Yet! Search and add Tokens!'
             Component={Token}
             extraProps={{
-                onDeleteClick: (token) => handleDeleteToken(token, triggerReload, deckID)
+                // if we delete a token trigger a reload to update the list
+                onDeleteClick: (token) => handleDeleteToken(token, triggerReload, deckID) 
             }}
         />
     )

@@ -97,11 +97,13 @@ const TokenSetSearchForm = (props) => {
     return(
         <div className="searchContainer">
             <h3 className="searchLabel">Search for a Set to add Tokens from</h3>
+
             {/* Upon submission set Results to results of Search */}
             <form id='tokenSetSearchForm' className='searchForm' onSubmit={ async (e) => {
+
                 // set request flag to the result of this function
                 // essentially determines if the request was made from the client  
-                // we await since the function is async
+                // await since the function is async
                 const requestSuccess = await handleSetSearch(e, setResults);
                 setIsRequestMade(requestSuccess);
                 onSearchStarted();
@@ -127,7 +129,7 @@ const TokenSetSearchForm = (props) => {
                     <SearchList tokens={results} 
                     onTokenSelect={(token) => onTokenSelect(token)}/> 
 
-                    <button className="makeDeckSubmit" style={{marginTop: '10px'}} onClick={() => {
+                    <button className="hideResults" style={{marginTop: '10px'}} onClick={() => {
                         setShowResults(false);
                         setResults([])}}>
                         Hide Search Results

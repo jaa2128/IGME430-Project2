@@ -2,12 +2,22 @@ const models = require('../models');
 const TokenDeck = models.TokenDeck;
 const Token = models.Token;
 
-// function to display deck page to user
+/**
+ * function to render the deck page
+ * @param {Request} req - request object
+ * @param {Response} res  - response object
+ * @returns 
+ */
 const deckPage = async (req, res) => {
     return res.render('app');
 };
 
-// Function to make a deck
+/**
+ * Handles creation of a new deck that belongs to a user
+ * @param {Request} req - request object
+ * @param {Response} res  - response object
+ * @returns 
+ */
 const makeDeck = async (req, res) => {
     if(!req.body.name) {
         return res.status(400).json({error: 'You must name the deck'});
@@ -35,7 +45,12 @@ const makeDeck = async (req, res) => {
     }
 }
 
-// Function to delete a Deck from a user
+/**
+ * Handles the deletion of a deck and the tokens inside of the deck
+ * @param {Request} req - request object
+ * @param {Response} res  - response object
+ * @returns 
+ */
 const deleteDeck = async (req, res) => {
     // ensure we have the deck's id to find it for deletion
     if(!req.body.deckID){
@@ -75,9 +90,15 @@ const deleteDeck = async (req, res) => {
     }
 }
 
-// Function to get all decks that belong to a user
+/**
+ * Handles retrieving all decks that belong to a user
+ * @param {Request} req - request object
+ * @param {Response} res  - response object
+ * @returns 
+ */
 const getDecks = async(req, res) => {
     try{
+        // get the user's id
         const query = {owner: req.session.account._id};
 
         // finds all Decks and also populates their 'tokens' array
@@ -93,8 +114,14 @@ const getDecks = async(req, res) => {
     }
 }
 
-// Get a Deck based off its Id, used to re-render Tokens upon Creation in React
-// because React doesn't check for internal changes to an object
+
+
+/**
+ * handles retriveal of a deck based off its Id
+ * @param {Request} req - request object
+ * @param {Response} res  - response object
+ * @returns 
+ */
 const getDeck = async (req, res) => {
     const {id} = req.query;
     try{

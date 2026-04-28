@@ -27,6 +27,12 @@ const handleDeck = (e, onDeckAdded) => {
     helper.sendRequest('POST', e.target.action, {name}, onDeckAdded);
 }
 
+/**
+ * Function to handle delete request to delete a Token Deck
+ * @param {String} deckID - Id of the deck that will be deleted
+ * @param {Function} onDeckDeleted - Callback function to trigger upon function call
+ * @returns - false if there is error, nothing if successful, essentially void
+ */
 const handleDeleteDeck = (deckID, onDeckDeleted) => {
     helper.sendRequest('DELETE', '/deleteDeck', {deckID}, onDeckDeleted);
     return false;
@@ -46,7 +52,7 @@ const DeckForm = (props) => {
                 method='POST'
                 className='deckForm'>
                 <label htmlFor='deckName'>New Deck: </label>
-                <input type="text" id="deckName" placeholder='Deck Name' name='deckName'/>
+                <input type="text" maxLength='18' id="deckName" placeholder='Deck Name' name='deckName'/>
                 <input type="submit" className="makeDeckSubmit" value='Create Deck'/>
                 
             </form>   
@@ -139,10 +145,12 @@ const DeckList = (props) => {
            onClick={() => props.onSelect(deck)} 
            style={{cursor: 'pointer'}}
            >
+            {/* Display the Deck Icon and deck info */}
             <img src='/assets/img/cards.png' alt='card face' className='cardface'/>
             <h3 className="deckName">Deck: {deck.name}</h3>
             <h3 className="tokenNum">Number of Tokens: {deck.tokens.length}</h3>
 
+            {/* Delete Deck Button */}
             <button className="deleteDeck" 
                 onClick={(e) => {
                     e.stopPropagation(); // prevents onClick from triggering

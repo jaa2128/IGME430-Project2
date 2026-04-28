@@ -1,3 +1,10 @@
+/**
+ * Restricts access to authenticated users only
+ * @param {Request} req - request object
+ * @param {Response} res - response object
+ * @param {import("express").NextFunction} next - next middleware function
+ * @returns 
+ */
 const requiresLogin = (req, res, next) => {
     if(!req.session.account){
         return res.redirect('/');
@@ -5,6 +12,13 @@ const requiresLogin = (req, res, next) => {
     return next();
 }
 
+/**
+ * Restricts access to unauthenticated users only
+ * @param {Request} req - request object
+ * @param {Response} res - response object
+ * @param {import("express").NextFunction} next - next middleware function
+ * @returns 
+ */
 const requiresLogout = (req, res, next) => {
     if(req.session.account) {
         return res.redirect('/deckPage');
@@ -13,6 +27,14 @@ const requiresLogout = (req, res, next) => {
     return next();
 }
 
+/**
+ * Enforces HTTPS connections redirects nonsecure requests to the https
+ * equivalent of the current URL
+ * @param {Request} req - request object
+ * @param {Response} res - response object
+ * @param {import("express").NextFunction} next - next middleware function
+ * @returns 
+ */
 const requiresSecure = (req, res, next) => {
     if(req.headers['x-forwarded-proto'] !== 'https'){
         return res.redirect(`https://${req.hostname}${req.url}`);
@@ -20,6 +42,14 @@ const requiresSecure = (req, res, next) => {
     return next();
 }
 
+
+/**
+ * bypasses security checks in non-production environments
+ * @param {Request} req - request object
+ * @param {Response} res - response object
+ * @param {import("express").NextFunction} next - next middleware function
+ * @returns 
+ */
 const bypassSecure = (req, res, next) => {
     next();
 }

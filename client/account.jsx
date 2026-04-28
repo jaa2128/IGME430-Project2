@@ -15,12 +15,13 @@ const handlePasswordChange = (e) => {
     const pass = e.target.querySelector('#pass').value;
     const pass2 = e.target.querySelector('#pass2').value;
 
-  
+    // if any of the fields are missing, show error
     if(!oldPass || !pass || !pass2) {
         helper.handleError('All fields are required!');
         return false;
     }
 
+    // if passwords don't match, show error
     if(pass !== pass2){
         helper.handleError('New Passwords do not match!');
         return false;
@@ -30,6 +31,11 @@ const handlePasswordChange = (e) => {
     return false;
 }
 
+/**
+ * Component meant to represent a change password on the Change Password page
+ * @param {object} props - This components properties
+ * @returns - A Form to change a user's password
+ */
 const ChangePasswordWindow = (props) => {
     return (
          <form id="changePasswordForm"

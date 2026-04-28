@@ -113,7 +113,7 @@ h2 {
     display: inline-block;
 }
 
-.makeDeckSubmit, #searchSetSubmit{
+.makeDeckSubmit, #searchSetSubmit, .hideResults{
     transition: background-color 0.4s ease;
     display: inline;
     width: fit-content;
@@ -299,7 +299,7 @@ h2 {
     margin-right: 5px;
 }
 
-.deleteToken, .deleteDeck{
+.deleteToken, .deleteDeck, .removeBoardToken{
     position:absolute;
     top: -1px;
     left: -1px;
@@ -322,11 +322,11 @@ h2 {
     text-align: center;
 }
 
-.token:hover .deleteToken, .deck:hover .deleteDeck{
+.token:hover .deleteToken, .deck:hover .deleteDeck, .boardToken:hover .removeBoardToken{
     display: flex;
 }
 
-.deleteToken:hover, .deleteDeck:hover{
+.deleteToken:hover, .deleteDeck:hover .boardToken:hover, .removeBoardToken:hover{
     background-color: #ff0000;
     justify-content: center;
 }
@@ -361,6 +361,7 @@ h3.tokenName{
 
 h3.tokenName, h3.deckName{
     font-weight: bold;
+    width: 250px;
 }
 
 h3.tokenName, h3.deckName, h3.tokenNum{
@@ -386,27 +387,26 @@ h3.tokenName, h3.deckName, h3.tokenNum{
 
 .board {
     display: flex;
-    flex-direction: row;
     flex-wrap: wrap; 
     justify-content: flex-start;
-    align-items: flex-start;
-    padding: 20px;
+    
     gap: 20px;
-    width: 100%;
 }
 
-.board:first-child{
-    margin: 40px;
-}
-
-.boardToken {
+.boardToken{
     display: inline-block;
-    margin-right: 40px;
+    flex: 0 0 auto;
+    transition: transform 0.3s ease, margin 0.3s ease;
+    position: relative;
+}
+
+.boardToken .cardFace{
+    margin: 0;
 }
 
 .boardToken.tapped {
     transform: rotate(90deg);
-    margin-right:  50px; 
+    margin: 0 45px; 
 }
 
 .viewWrapper {
@@ -495,9 +495,10 @@ h3.tokenName, h3.deckName, h3.tokenNum{
 }
 
 .boardArea {
-    width: 100%;
     display: flex;
     justify-content: center;
+    width: 94vw;
+    padding: 3vw;
 }
 
 .dialogueWrapper{
@@ -561,4 +562,7 @@ h3.tokenName, h3.deckName, h3.tokenNum{
 
 .boardToken{
     background-color: #4b0e0e;
+    border: 2px solid #4b0e0e;
+    border-radius: 4px;
+    padding: 10px;
 }

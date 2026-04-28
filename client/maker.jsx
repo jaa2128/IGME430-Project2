@@ -34,7 +34,12 @@ const handleToken = (selectedToken, onTokenAdded, deckID) => {
     return false;
 }
 
-// Handles what should happen when a token is clicked
+/**
+ * Function to handle what should happen when a token is clicked to add to the board
+ * @param {Object} token - The selected token to add to board
+ * @param {Function} onTokenPlaced - Callback function to trigger upon function call
+ * @returns - nothing essentially void
+ */
 const handlePlaceOnBoard = (token, onTokenPlaced) => {
     // Create a new client side instance of a Token
     const newInstance = {
@@ -53,24 +58,39 @@ const handlePlaceOnBoard = (token, onTokenPlaced) => {
     // array
     onTokenPlaced((current) => [...current, newInstance]);
 }
-
-// Handle tapping a Token on the board
+/**
+ * Function to handle what should happen when a token on the board is clicked
+ * @param {String} instanceID - the instance Id of the Token being tapped
+ * @param {Function} onTokenTapped - Callback function to trigger upon function call
+ * @returns - nothing essentially void
+ */
 const handleTapToken = (instanceID, onTokenTapped) => {
     // return mapped array as React only changes state for when the variable changes
     // not for changes in internal state
     onTokenTapped((current) => current.map (token => 
         // For each token in the current array, check if the instanceID matches
-        // if it is return that token with isTapped field flipped, if not, return the same token
+        // if it does return that token with isTapped field flipped, if not, return the same token
         token.instanceID === instanceID ? {...token, isTapped: !token.isTapped} : token
     ));
 }
 
+/**
+ * Function to handle what should happen when a token on the board is removed
+ * @param {String} instanceID - the instance Id of the Token being tapped
+ * @param {Function} onTokenRemove - Callback function to trigger upon function call
+ * @returns - nothing essentially void
+ */
 const handleRemoveFromBoard = (instanceID, onTokenRemove) => {
     // return filtered array as React only changes state for when the variable changes
     // not for changes in internal state
     onTokenRemove((current) => current.filter(token => token.instanceID !== instanceID));
 }
 
+/**
+ * Func Component representing an ad on a page
+ * @param {object} props - this component's properties
+ * @returns - a div meant to display 'ad' content
+ */
 const AdComponent = (props) => {
     return (
         <div className={`ad-placeholder ${props.type}`}>
@@ -114,7 +134,7 @@ const DeckMakerView = () => {
                 </div>
             </div>
             
-             {/* Left Ad Pillar */}
+             {/* Right Ad Pillar */}
             <AdComponent type="ad-right" />
         </div>
     );
@@ -150,6 +170,8 @@ const DeckView = () => {
             <AdComponent type="ad-left" />
 
             <div className='mainContent'>
+
+                {/* Navigation to different parts of the App */}
                 <div className="navLinks">
                     <Link className='reactLink' id='backToDecks' to='/deckPage' onClick={() => helper.hideError()}>&lt; Back to Decks</Link>
                     
@@ -162,6 +184,7 @@ const DeckView = () => {
                     <h3><span id="errorMessage"></span></h3>
                 </div>
 
+                {/* Search Set Form */}
                 <div className="searchArea">
                         <TokenSetSearchForm 
                         // Pass down params to show search results upon submitting 
@@ -178,13 +201,14 @@ const DeckView = () => {
                         }}/>
                         
                 </div>
-                {/* Always show Tokens in User's deck */}
+
+                {/*Tokens in User's deck */}
                 <div className="tokens">
                     <TokenList reloadTokens={reloadDeck} deckID={id} triggerReload={() => setReloadDeck(!reloadDeck)}/>
                 </div>
             </div>
 
-            {/* Left Ad Pillar */}
+            {/* Right Ad Pillar */}
             <AdComponent type="ad-right" />
         </div>
         
@@ -216,14 +240,18 @@ const BoardView = () => {
             <div className="viewWrapper">
                 <div className="mainContent">
 
+                    {/* Navigation */}
                     <div className="navLinks">
                         <Link className='reactLink' to={`/collection/${id}`}>&lt; Back to Deck</Link>
                     </div>
         
-                     {/* Left Ad Pillar */}
+                     {/* Banner Ad */}
                     <AdComponent type="banner" />
+
+                    {/* Deck the User is playing with */}
                     <h2>Playing: {name}</h2>
-                        {/* Where Players can play their cards in their deck */}
+                    
+                    {/* Where Players can play their cards in their deck */}
                     <div className="boardDeck">
                         <BoardDeckList
                             deckID={id}
@@ -235,6 +263,7 @@ const BoardView = () => {
             </div>
             
 
+            {/* Area where Player plays cards from their deck */}
             <div className="boardArea">
                 <Board
                     boardTokens={boardTokens}

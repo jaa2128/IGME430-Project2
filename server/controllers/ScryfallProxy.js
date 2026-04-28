@@ -3,7 +3,7 @@ const scryfall = require('scryfall-client').default;
 /**
  * Helper function to simply grab tokens based off some set param
  * can either be a set code or set name
- * @param {String} setParam 
+ * @param {String} setParam - MTG set parameter
  * @returns {Array} - array of Tokens returned by scryfall search
  */
 const searchBySetParam = (setParam) => {
@@ -36,7 +36,14 @@ const searchBySetParam = (setParam) => {
     .catch(()=>null)
 }
 
-// Controller function to get tokens from a set requested by the user
+/**
+ * Retrieves tokens from the requested Magic the Gathering set
+ * formats the request query to match Scryfall's token sets by appending
+ * 't' to a setCode or 'Tokens' to the Set Name
+ * @param {Request} req - request object
+ * @param {Response} res - response object
+ * @returns 
+ */
 const getTokensfromSet = async (req, res) => {
 
     // grab query params

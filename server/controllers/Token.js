@@ -2,7 +2,12 @@ const models= require('../models');
 const Token = models.Token;
 const TokenDeck = models.TokenDeck;
 
-// Controller function to add a Token to a Deck based off it's ID
+/**
+ * Handles adding a Token to a User's Deck
+ * @param {Request} req - request object
+ * @param {Response} res - response object
+ * @returns 
+ */
 const addToken = async (req, res) => {
 
     // ensure all fields are sent
@@ -53,6 +58,12 @@ const addToken = async (req, res) => {
     }
 }
 
+/**
+ * Handles deleting a Token from a User's deck as well as the database
+ * @param {Request} req - request object
+ * @param {Response} res - response object
+ * @returns 
+ */
 const deleteToken = async (req, res) => {
      // ensure all fields are sent
     if(!req.body.deckID || !req.body.tokenID) {

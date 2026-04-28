@@ -148,6 +148,12 @@ const SignupWindow = (props) => {
     );
 }
 
+/**
+ * Func Component representing a Form to change a password that a user
+ * has forgot
+ * @param {object} props - This components properties
+ * @returns - A Form to reset a password
+ */
 const ForgotPasswordWindow = (props) => {
     return (
          <form id="forgotPasswordForm"

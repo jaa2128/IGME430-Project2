@@ -1,11 +1,17 @@
 // Base React
 const React = require('react');
 
+/**
+ * Generic Token List Component to help create Lists of Tokens
+ * @param {object} props - This components properties
+ * @returns - a list of token token nodes comprised of a component that's passed in
+ */
 const GenericTokenList = (props) => {
-    const tokens = props.tokens;
-    const emptyMessage = props.emptyMessage;
-    const Component = props.Component;
-    const extraProps = props.extraProps;
+
+    const tokens = props.tokens; // array of tokens
+    const emptyMessage = props.emptyMessage; // what should display if no tokens are present
+    const Component = props.Component; // the component to render per token in the array
+    const extraProps = props.extraProps; // array of props that may be important to a Token Component
     const listClassName = props.listClassName; // optional className
 
     // If there are no tokens
